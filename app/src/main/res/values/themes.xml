@@ -2,4 +2,8 @@
 <resources>
 
     <style name="Theme.PQWSFlowProject" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/rounded_shape</item>
+    </style>
 </resources>

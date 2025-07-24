@@ -10,12 +10,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
+import com.example.pqwsflowproject.databinding.ActivityMainBinding
 import com.example.pqwsflowproject.ui.theme.PQWSFlowProjectTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+
+        /*setContent {
             PQWSFlowProjectTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -25,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     Greeting("Android")
                 }
             }
-        }
+        }*/
     }
 }
 
@@ -44,3 +51,4 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
