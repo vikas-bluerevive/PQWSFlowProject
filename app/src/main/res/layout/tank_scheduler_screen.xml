@@ -138,7 +138,7 @@
             tools:layout_editor_absoluteY="143dp" />
 
     </RelativeLayout>
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/materialButton3"
         style="@style/AppTheme.RoundedCornerMaterialButton"
         android:layout_width="match_parent"
