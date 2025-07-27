@@ -1,12 +1,16 @@
 package com.example.pqwsflowproject
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.pqwsflowproject.databinding.SettingsScreenBinding
-import com.example.pqwsflowproject.databinding.TankSchedulerScreenBinding
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +26,7 @@ class SettingFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var bool :Boolean = false
     private lateinit var binding : SettingsScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +43,42 @@ class SettingFragment : Fragment() {
         binding = SettingsScreenBinding.inflate(inflater,container,false)
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        binding.textView24.setOnClickListener{
+            val settingsIntent: Intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, activity?.getPackageName())
+                .putExtra(Settings.EXTRA_CHANNEL_ID, "Channel ID")
+            startActivity(settingsIntent)
+        }
+        binding.textView30.setOnClickListener{
+            if(bool == false) {
+                bool = true
+                binding.textView30.setText("Dark")
+                activity?.application?.setTheme(R.style.Theme_PQWSFlowProject3)
+             //   activity?.setTheme(bool)
+                //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+               /* val intent =     Intent(binding.textView30.context, MainActivity::class.java)
+
+                ContextCompat.startActivity(binding.textView30.context, intent, null)
+                activity?.finish()*/
+            }else{
+                bool = false
+                binding.textView30.setText("Light")
+                //activity?.setTheme(bool)
+                activity?.application?.setTheme(R.style.Theme_PQWSFlowProject2)
+                //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+             /*   val intent =     Intent(binding.textView30.context, MainActivity::class.java)
+
+                ContextCompat.startActivity(binding.textView30.context, intent, null)
+                activity?.finish()*/
+            }
+        }
+
     }
 
     companion object {

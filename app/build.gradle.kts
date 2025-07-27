@@ -71,4 +71,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Add this line for the Chart Library
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

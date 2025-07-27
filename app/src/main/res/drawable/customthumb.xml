@@ -4,15 +4,15 @@
         <shape android:dither="true" android:shape="rectangle" android:useLevel="false" android:visible="true">
             <corners android:radius="20dp" />
             <solid android:color="@color/white" />
-            <size android:width="37dp" android:height="37dp" />
-            <stroke android:width="4dp" android:color="@color/black" />
+            <size android:width="25dp" android:height="25dp" />
+            <stroke android:width="4dp" android:color="@color/blue" />
         </shape>
     </item>
     <item android:state_checked="false">
         <shape android:dither="true" android:shape="rectangle" android:useLevel="false" android:visible="true">
             <corners android:radius="20dp" />
             <solid android:color="@color/white" />
-            <size android:width="37dp" android:height="37dp" />
+            <size android:width="25dp" android:height="25dp" />
             <stroke android:width="4dp" android:color="#cdcdcd" />
         </shape>
     </item>

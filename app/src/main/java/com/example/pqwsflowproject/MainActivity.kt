@@ -1,5 +1,6 @@
 package com.example.pqwsflowproject
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import com.example.pqwsflowproject.Interface.TileClick
 import com.example.pqwsflowproject.databinding.ActivityMainBinding
 import com.example.pqwsflowproject.ui.theme.PQWSFlowProjectTheme
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -24,6 +26,21 @@ class MainActivity : FragmentActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var newFragment: Fragment = DashBoardFragment().also {
+           it.TileClick(object : TileClick{
+                override fun tileClick(click: Boolean) {
+                   if(click){
+                       val fragment: Fragment = TankSchedulerFragment()
+                       val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+                       ft.add(binding.frameid.id, fragment).commit()
+                   }
+                }
+            })
+        }
+
+        var ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+        ft.replace(binding.frameid.id, newFragment).commit()
+
         binding.bottomNavigation.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
             val fragment: Fragment? = null
             when (item.itemId) {
@@ -33,7 +50,17 @@ class MainActivity : FragmentActivity() {
                      val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
                      ft.replace(binding.frameContainer.id, newFragment).commit()*/
 
-                    val newFragment: Fragment = DashBoardFragment()
+                    val newFragment: Fragment = DashBoardFragment().also {
+                        it.TileClick(object : TileClick{
+                            override fun tileClick(click: Boolean) {
+                                if(click){
+                                    val fragment: Fragment = TankSchedulerFragment()
+                                    val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+                                    ft.add(binding.frameid.id, fragment).commit()
+                                }
+                            }
+                        })
+                    }
                     val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
                     ft.replace(binding.frameid.id, newFragment).commit()
 
@@ -44,7 +71,8 @@ class MainActivity : FragmentActivity() {
                     /*    val newFragment: Fragment = ProductListFragment()
                         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
                         ft.replace(binding.frameContainer.id, newFragment).commit()*/
-                    val newFragment: Fragment = TankSchedulerFragment()
+                  //  val newFragment: Fragment = TankSchedulerFragment()
+                        val newFragment: Fragment = SchedulesFragment()
                     val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
                     ft.replace(binding.frameid.id, newFragment).commit()
 
@@ -81,7 +109,11 @@ class MainActivity : FragmentActivity() {
             }
         }*/
     }
+fun Activity.setTheme(night :Boolean) {
 
+    // Or even have more than two theme styles
+    this.setTheme(if (night) R.style.Theme_PQWSFlowProject3 else R.style.Theme_PQWSFlowProject2)
+}
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

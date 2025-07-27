@@ -1,15 +1,17 @@
 package com.example.pqwsflowproject
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import androidx.appcompat.R
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pqwsflowproject.adapter.AlertAdapter
-import com.example.pqwsflowproject.databinding.AlertScreenBinding
+import com.example.pqwsflowproject.adapter.PastSchedulesAdapter
+import com.example.pqwsflowproject.adapter.UpcomingSchedulesAdapter
+import com.example.pqwsflowproject.databinding.SchedulesScreenBinding
 import com.example.pqwsflowproject.databinding.TankSchedulerScreenBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,14 +21,14 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [AlertFragment.newInstance] factory method to
+ * Use the [SchedulesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AlertFragment : Fragment() {
+class SchedulesFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var binding : AlertScreenBinding
+    private lateinit var binding : SchedulesScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,45 +41,31 @@ class AlertFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = AlertScreenBinding.inflate(inflater,container,false)
+        binding = SchedulesScreenBinding.inflate(inflater,container,false)
         // Inflate the layout for this fragment
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        var alertAdapter = AlertAdapter()
-        binding.recyclerAlertListing.layoutManager = LinearLayoutManager(activity,
+        var adapter = UpcomingSchedulesAdapter()
+        binding.recyclerUpcomingListing.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,false)
-        binding.recyclerAlertListing.adapter = alertAdapter
-        val areaCode = arrayOf("All", "Area 1", "Area2")
-        var areaCodeAdapter = activity?.let {
-            ArrayAdapter<CharSequence>(
-                it,
-                R.layout.support_simple_spinner_dropdown_item,
-                areaCode
-            )
-        }
-        binding.spinner2.adapter = areaCodeAdapter
+        binding.recyclerUpcomingListing.adapter = adapter
 
-        val areaCode2 = arrayOf("Urgent", "Area 1", "Area2")
-        var areaCode2Adapter = activity?.let {
-            ArrayAdapter<CharSequence>(
-                it,
-                R.layout.support_simple_spinner_dropdown_item,
-                areaCode2
-            )
+
+        var adapter2 = PastSchedulesAdapter()
+        binding.recyclerPastListing.layoutManager = LinearLayoutManager(activity,
+            LinearLayoutManager.VERTICAL,false)
+        binding.recyclerPastListing.adapter = adapter2
+
+        binding.newschedulebutton.setOnClickListener{
+            val intent =     Intent(binding.newschedulebutton.context, TankScheduleActivity::class.java)
+
+            ContextCompat.startActivity(binding.newschedulebutton.context, intent, null)
         }
-        binding.spinner3.adapter = areaCode2Adapter
-        val areaCode3 = arrayOf("Maintainess", "Area 1", "Area2")
-        var areaCode3Adapter = activity?.let {
-            ArrayAdapter<CharSequence>(
-                it,
-                R.layout.support_simple_spinner_dropdown_item,
-                areaCode3
-            )
-        }
-        binding.spinner4.adapter = areaCode3Adapter
+
+
     }
 
     companion object {
@@ -87,12 +75,12 @@ class AlertFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment AlertFragment.
+         * @return A new instance of fragment SchedulesFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            AlertFragment().apply {
+            SchedulesFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pqwsflowproject.Interface.TileClick
+import com.example.pqwsflowproject.adapter.TankAdapter
 import com.example.pqwsflowproject.databinding.DashboardScreenBinding
 
 /**
@@ -22,6 +26,8 @@ class DashBoardFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding : DashboardScreenBinding
+
+     var tileClick :TileClick?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +79,31 @@ class DashBoardFragment : Fragment() {
         binding.spinner4.adapter = supplyTankCodeAdapter
 
 
+        var adapter = TankAdapter()
+        adapter.setInterface(object  : TileClick{
+            override fun tileClick(click: Boolean) {
+               if(click){
+                   tileClick?.tileClick(click)
+
+
+
+               }
+            }
+        })
+        binding.recyclerTankersListing.layoutManager = LinearLayoutManager(activity,
+            LinearLayoutManager.VERTICAL,false)
+       binding.recyclerTankersListing.adapter = adapter
+
+
+    }
+    open fun TileClick(tileClicked: TileClick){
+        tileClick = tileClicked
     }
 
     companion object {
+
+
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
