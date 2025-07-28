@@ -1,22 +1,34 @@
 package com.example.pqwsflowproject
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.appcompat.R
-import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.pqwsflowproject.databinding.MapScreenBinding
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.maps.DirectionsApi
+import com.google.maps.GeoApiContext
+import com.google.maps.android.PolyUtil
+import com.google.maps.model.DirectionsResult
+import com.google.maps.model.DirectionsRoute
+import com.google.maps.model.TravelMode
+import org.joda.time.DateTime
+import org.json.JSONObject
+import java.io.IOException
+import java.util.concurrent.TimeUnit
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -33,10 +45,12 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var binding : MapScreenBinding
-
-    private var googleMap: GoogleMap?=null
+    private lateinit var binding: MapScreenBinding
+    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private var googleMap: GoogleMap? = null
     private var mMap: MapView? = null
+
+    private val overview = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -49,7 +63,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = MapScreenBinding.inflate(inflater,container,false)
+        binding = MapScreenBinding.inflate(inflater, container, false)
         mMap = binding.mapview as MapView
         mMap?.onCreate(savedInstanceState)
         mMap?.getMapAsync(this)
@@ -66,6 +80,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         super.onPause()
         mMap?.onPause()
     }
+
     override fun onStart() {
         super.onStart()
         mMap?.onStart()
@@ -86,17 +101,29 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         mMap?.onLowMemory()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
-      /*  val mapFragment = childFragmentManager.findFragmentById(binding.mapLinearContainer.id) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)*/
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
+       /* mainActivityViewModel.jsonString.observe(viewLifecycleOwner, Observer {
+           drawPath(it)
+        })*/
+
+        mainActivityViewModel.result.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                googleMap?.let { it1 -> addPolyline(it, it1) };
+                googleMap?.let { it1 -> positionCamera(it.routes[overview], it1) };
+                googleMap?.let { it1 -> addMarkersToMap(it, it1) };
+            }
+        })
         val areaCode = arrayOf("Select Area", "Area 1", "Area2")
         var areaCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
-                R.layout.support_simple_spinner_dropdown_item,
+                androidx.appcompat. R.layout.support_simple_spinner_dropdown_item,
                 areaCode
             )
         }
@@ -106,29 +133,233 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         var smartBoxCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
-                R.layout.support_simple_spinner_dropdown_item,
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 smartBoxCode
             )
         }
         binding.spinner3.adapter = smartBoxCodeAdapter
 
-
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
-        googleMap.getUiSettings().setZoomControlsEnabled(true)
-        googleMap.uiSettings.isScrollGesturesEnabled = true
-        googleMap.addMarker(MarkerOptions().position(LatLng(31.68,76.52)))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(31.68,76.52), 40F))
-        googleMap.addMarker(MarkerOptions().position(LatLng(31.690783,76.517715)))
-        var polyline = googleMap.addPolyline(PolylineOptions()
-            .add(LatLng(31.68,76.52) , LatLng(31.690783,76.517715))
-            .width(15F)
-            .color(android.graphics.Color.RED))
+      //  googleMap.getUiSettings().setZoomControlsEnabled(true)
+      //  googleMap.uiSettings.isScrollGesturesEnabled = true
+        setupGoogleMapScreenSettings(googleMap)
+
+       /* val results: DirectionsResult? = getDirectionsDetails(
+            "483 George St, Sydney NSW 2000, Australia",
+            "182 Church St, Parramatta NSW 2150, Australia",
+            TravelMode.DRIVING
+        )*/
+        mainActivityViewModel.getResults("483 George St, Sydney NSW 2000, Australia",
+            "182 Church St, Parramatta NSW 2150, Australia",
+            TravelMode.DRIVING)
+
+
+        /*googleMap.addMarker(MarkerOptions().position(LatLng(31.68, 76.52)))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(31.68, 76.52), 40F))
+        googleMap.addMarker(MarkerOptions().position(LatLng(31.690783, 76.517715)))
+
+
+        makeURL(31.68,76.52,31.690783,76.517715)?.let { mainActivityViewModel.getJsonFromString(it) }*/
+       /* var polyline = googleMap.addPolyline(
+            PolylineOptions()
+                .add(LatLng(31.68, 76.52), LatLng(31.690783, 76.517715))
+                .width(15F)
+                .color(android.graphics.Color.RED)
+        )*/
 
     }
+
+    private fun addMarkersToMap(results: DirectionsResult, mMap: GoogleMap) {
+        mMap.addMarker(
+            MarkerOptions().position(
+                LatLng(
+                    results.routes.get(overview).legs.get(
+                        overview
+                    ).startLocation.lat,
+                    results.routes.get(overview).legs.get(overview).startLocation.lng
+                )
+            ).title(results.routes.get(overview).legs.get(overview).startAddress)
+        )
+        mMap.addMarker(
+            MarkerOptions().position(
+                LatLng(
+                    results.routes.get(overview).legs.get(
+                        overview
+                    ).endLocation.lat,
+                    results.routes.get(overview).legs.get(overview).endLocation.lng
+                )
+            ).title(results.routes.get(overview).legs.get(overview).startAddress)
+                .snippet(getEndLocationTitle(results))
+        )
+    }
+
+    private fun positionCamera(route: DirectionsRoute, mMap: GoogleMap) {
+        mMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(
+                    route.legs.get(overview).startLocation.lat,
+                    route.legs.get(overview).startLocation.lng
+                ), 12f
+            )
+        )
+    }
+
+    private fun addPolyline(results: DirectionsResult, mMap: GoogleMap) {
+        val decodedPath: List<LatLng> =
+            PolyUtil.decode(results.routes.get(overview).overviewPolyline.getEncodedPath())
+        mMap.addPolyline(PolylineOptions().addAll(decodedPath))
+    }
+
+    private fun getEndLocationTitle(results: DirectionsResult): String? {
+        return "Time :" + results.routes.get(overview).legs.get(overview).duration.humanReadable + " Distance :" + results.routes.get(
+            overview
+        ).legs.get(overview).distance.humanReadable
+    }
+    private fun setupGoogleMapScreenSettings(mMap: GoogleMap) {
+        mMap.isBuildingsEnabled = true
+        mMap.isIndoorEnabled = true
+        mMap.isTrafficEnabled = true
+        val mUiSettings = mMap.uiSettings
+        mUiSettings.isZoomControlsEnabled = true
+        mUiSettings.isCompassEnabled = true
+        mUiSettings.isMyLocationButtonEnabled = true
+        mUiSettings.isScrollGesturesEnabled = true
+        mUiSettings.isZoomGesturesEnabled = true
+        mUiSettings.isTiltGesturesEnabled = true
+        mUiSettings.isRotateGesturesEnabled = true
+    }
+
+    private fun getDirectionsDetails(
+        origin: String,
+        destination: String,
+        mode: TravelMode
+    ): DirectionsResult? {
+        val now = DateTime()
+        return try {
+            DirectionsApi.newRequest(getGeoContext())
+                .mode(mode)
+                .origin(origin)
+                .destination(destination)
+                .departureTime(now)
+                .await()
+        } catch (e: ApiException) {
+            e.printStackTrace()
+            null
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+            null
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun getGeoContext(): GeoApiContext? {
+        val geoApiContext = GeoApiContext()
+        return geoApiContext
+            .setQueryRateLimit(3)
+            .setApiKey("AIzaSyAsreEPAjoR0X9TVKDRXKnS4mG2Ju9_Jko")
+            .setConnectTimeout(1, TimeUnit.SECONDS)
+            .setReadTimeout(1, TimeUnit.SECONDS)
+            .setWriteTimeout(1, TimeUnit.SECONDS)
+    }
+
+    fun drawPath(result: String?) {
+        /* if (line != null) {
+            myMap.clear()
+        }
+        myMap.addMarker(
+            MarkerOptions().position(endLatLng).icon(
+                BitmapDescriptorFactory.fromResource(R.drawable.redpin_marker)
+            )
+        )
+        myMap.addMarker(
+            MarkerOptions().position(startLatLng).icon(
+                BitmapDescriptorFactory.fromResource(R.drawable.redpin_marker)
+            )
+        )*/
+        try {
+            // Tranform the string into a json object
+            val json = JSONObject(result)
+            val routeArray = json.getJSONArray("routes")
+            val routes = routeArray.getJSONObject(0)
+            val overviewPolylines = routes
+                .getJSONObject("overview_polyline")
+            val encodedString = overviewPolylines.getString("points")
+            val list: List<LatLng> = decodePoly(encodedString)
+            for (z in 0 until list.size - 1) {
+                val src = list[z]
+                val dest = list[z + 1]
+                var polyline = googleMap?.addPolyline(
+                    PolylineOptions()
+                        .add(
+                            LatLng(src.latitude, src.longitude),
+                            LatLng(dest.latitude, dest.longitude)
+                        )
+                        .width(15f).color(android.graphics.Color.RED).geodesic(true)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun decodePoly(encoded: String): List<LatLng> {
+        val poly: MutableList<LatLng> = ArrayList()
+        var index = 0
+        val len = encoded.length
+        var lat = 0
+        var lng = 0
+        while (index < len) {
+            var b: Int
+            var shift = 0
+            var result = 0
+            do {
+                b = encoded[index++].code - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lat += dlat
+            shift = 0
+            result = 0
+            do {
+                b = encoded[index++].code - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lng += dlng
+            val p = LatLng(
+                lat.toDouble() / 1E5,
+                lng.toDouble() / 1E5
+            )
+            poly.add(p)
+        }
+        return poly
+    }
+
+    fun makeURL(
+        sourcelat: Double, sourcelog: Double, destlat: Double,
+        destlog: Double
+    ): String? {
+        val urlString = StringBuilder()
+        urlString.append("http://maps.googleapis.com/maps/api/directions/json")
+        urlString.append("?origin=") // from
+        urlString.append(java.lang.Double.toString(sourcelat))
+        urlString.append(",")
+        urlString.append(java.lang.Double.toString(sourcelog))
+        urlString.append("&destination=") // to
+        urlString.append(java.lang.Double.toString(destlat))
+        urlString.append(",")
+        urlString.append(java.lang.Double.toString(destlog))
+        urlString.append("&sensor=false&mode=driving&alternatives=true")
+        return urlString.toString()
+    }
+
 
     companion object {
         /**

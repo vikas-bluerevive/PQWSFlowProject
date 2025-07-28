@@ -263,7 +263,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginTop="15dp"
-        android:text="Control Boxes"
+        android:text="Water Tank"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -277,7 +277,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginTop="9dp"
-        android:text="Manage your smart control boxes"
+        android:text="Manage your water tank"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toBottomOf="@+id/textView31"></TextView>
 
