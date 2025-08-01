@@ -103,8 +103,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
-
-        <Spinner
+        <EditText
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:id="@+id/editTimeSchedule"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:text="Time Schedule Water Supply"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:textColor="@color/black"></EditText>
+       <!-- <Spinner
             android:id="@+id/spinner3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,7 +124,7 @@
             android:gravity="center"
             android:spinnerMode="dropdown"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="143dp" />
+            tools:layout_editor_absoluteY="143dp" />-->
 
     </RelativeLayout>
 

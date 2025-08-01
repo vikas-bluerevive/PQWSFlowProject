@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -66,6 +67,32 @@ class DashBoardFragment : Fragment() {
             )
         }
         binding.spinner3.adapter = sourceTankCodeAdapter
+
+        binding.spinner3.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if(p2 != 0){
+
+                    binding.view3.visibility = View.VISIBLE
+                    binding.view4.visibility = View.VISIBLE
+                    binding.textView17.visibility = View.VISIBLE
+                    binding.recyclerTankersListing.visibility = View.VISIBLE
+                }else{
+
+                    binding.view3.visibility = View.GONE
+                    binding.view4.visibility = View.GONE
+                    binding.textView17.visibility = View.GONE
+                    binding.recyclerTankersListing.visibility = View.GONE
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+            );
+
+
         val supplyTankCode = arrayOf("Select Supply Tank", "Tank1", "Tank2", "Tank3")
 
         var supplyTankCodeAdapter = activity?.let {

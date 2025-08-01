@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "168473639692",
+    "project_id": "pqwsflowproject-12c32",
+    "storage_bucket": "pqwsflowproject-12c32.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168473639692:android:95d93b255994957d60e729",
+        "android_client_info": {
+          "package_name": "com.example.pqwsflowproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASyPUYTt406UtacFr2A9Hlo11rBLQQodQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

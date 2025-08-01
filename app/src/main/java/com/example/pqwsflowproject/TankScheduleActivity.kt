@@ -1,12 +1,13 @@
 package com.example.pqwsflowproject
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.example.pqwsflowproject.databinding.ActivityMainBinding
 import com.example.pqwsflowproject.databinding.ActivityTankScheduleBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -14,11 +15,26 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+
 
 class TankScheduleActivity : FragmentActivity() {
 
     private lateinit var binding: ActivityTankScheduleBinding
+    private var  date_time :String = ""
+    private lateinit var  datePickerDialog :DatePickerDialog
+    private  lateinit var  timePickerDialog: TimePickerDialog
     override fun onCreate(savedInstanceState: Bundle?) {
+        val prefs =
+            PreferenceManager.getDefaultSharedPreferences(this)
+        val yourLocked: Boolean = prefs.getBoolean("locked", false)
+        if(yourLocked){
+            setTheme(R.style.Theme_PQWSFlowProject3)
+        }else{
+            setTheme(R.style.Theme_PQWSFlowProject2)
+        }
         super.onCreate(savedInstanceState)
 
         binding = ActivityTankScheduleBinding.inflate(layoutInflater)
@@ -37,7 +53,7 @@ class TankScheduleActivity : FragmentActivity() {
 
         binding.spinner2.adapter = instantWaterCodeAdapter
 
-        val timeScheduleWaterSupplyCode = arrayOf("Time Schedule Water Supply", "time1", "time2","time3")
+        /*var timeScheduleWaterSupplyCode = arrayOf("Time Schedule Water Supply", "time1", "time2","time3")
         var timeScheduleWaterSupplyCodeAdapter =
             ArrayAdapter<CharSequence>(
                 this,
@@ -45,7 +61,25 @@ class TankScheduleActivity : FragmentActivity() {
                 timeScheduleWaterSupplyCode
             )
 
+
         binding.spinner3.adapter = timeScheduleWaterSupplyCodeAdapter
+
+        binding.spinner3.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                 datePicker()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        })*/
+
+        binding.editTimeSchedule.setOnClickListener {
+            datePicker()
+        }
+        binding.editTimeSchedule.setFocusable(false);
+
 
         val waterToBeFilledCode = arrayOf("Select Water to be filled", "water1", "water2","water3")
 
@@ -64,6 +98,54 @@ class TankScheduleActivity : FragmentActivity() {
         setupLineChartStyle(lineChart)
         loadChartData(lineChart)
     }
+
+
+    private fun datePicker() {
+
+        // Get Current Date
+        val c: Calendar = Calendar.getInstance()
+        var mYear = c.get(Calendar.YEAR)
+        var mMonth = c.get(Calendar.MONTH)
+        var mDay = c.get(Calendar.DAY_OF_MONTH)
+         datePickerDialog = DatePickerDialog(this,
+            { view, year, monthOfYear, dayOfMonth ->
+                date_time = dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year
+                //*************Call Time Picker Here ********************
+                timePicker()
+            }, mYear, mMonth, mDay
+        )
+        datePickerDialog.show()
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+    }
+    private fun timePicker() {
+        // Get Current Time
+        val c = Calendar.getInstance()
+        var mHour = c[Calendar.HOUR_OF_DAY]
+        var mMinute = c[Calendar.MINUTE]
+
+        // Launch Time Picker Dialog
+        timePickerDialog = TimePickerDialog(this,
+            { view, hourOfDay, minute ->
+                mHour = hourOfDay
+                mMinute = minute
+                val calendar = Calendar.getInstance()
+                calendar.set(datePickerDialog.datePicker.getYear(), datePickerDialog.datePicker.getMonth(), datePickerDialog.datePicker.getDayOfMonth(), mHour,mMinute)
+
+                val gmtFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                /* val gmtTime: TimeZone = TimeZone.getTimeZone("GMT")
+                 gmtFormat.setTimeZone(gmtTime)*/
+                val mydate = "" + gmtFormat.format(calendar.time)
+               // binding.editTimeSchedule.setText(date_time + " " + hourOfDay + ":" + minute)
+                binding.editTimeSchedule.setText(mydate)
+                //et_show_date_time.setText()
+            }, mHour, mMinute, false
+        )
+        timePickerDialog.show()
+
+
+
+    }
+
     private fun setupLineChartStyle(chart: LineChart) {
         chart.description.isEnabled = false
         chart.legend.isEnabled = false

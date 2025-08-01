@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -77,6 +79,16 @@ dependencies {
     implementation("com.google.maps:google-maps-services:0.1.20")
     implementation( "com.google.maps.android:android-maps-utils:0.5")
 
+    // retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.6.1")
+    implementation ("com.squareup.retrofit2:converter-gson:2.6.1")
+    implementation ("com.squareup.okhttp3:okhttp:3.10.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:3.8.0")
+    implementation ("com.squareup.retrofit2:converter-scalars:2.1.0")
+
     // Add this line for the Chart Library
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
+    implementation ("com.google.firebase:firebase-messaging")
 }

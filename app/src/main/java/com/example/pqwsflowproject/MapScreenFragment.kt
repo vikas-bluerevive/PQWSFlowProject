@@ -1,10 +1,12 @@
 package com.example.pqwsflowproject
 
-import android.R
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,8 +29,8 @@ import com.google.maps.model.TravelMode
 import org.joda.time.DateTime
 import org.json.JSONObject
 import java.io.IOException
+import java.util.Locale
 import java.util.concurrent.TimeUnit
-
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -103,6 +105,8 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
 
 
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -139,6 +143,34 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         }
         binding.spinner3.adapter = smartBoxCodeAdapter
 
+        binding.spinner3.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if(p2 != 0){
+
+                    binding.mapLinearContainer.visibility = View.VISIBLE
+                    binding.view3.visibility = View.VISIBLE
+
+                }else{
+                    binding.mapLinearContainer.visibility = View.GONE
+                    binding.view3.visibility = View.GONE
+                }
+
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+
+        })
+
+
+
+        var geocoder = activity?.let { Geocoder(it, Locale.getDefault()) }
+        var  addresses : MutableList<Address>? = geocoder?.getFromLocation(31.68, 76.52, 1)
+
+        val address: Address? = addresses?.get(0)
+       var result =  address?.getAddressLine(0) + ", " + address?.getLocality()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -152,9 +184,9 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
             "182 Church St, Parramatta NSW 2150, Australia",
             TravelMode.DRIVING
         )*/
-        mainActivityViewModel.getResults("483 George St, Sydney NSW 2000, Australia",
+       /* mainActivityViewModel.getResults("483 George St, Sydney NSW 2000, Australia",
             "182 Church St, Parramatta NSW 2150, Australia",
-            TravelMode.DRIVING)
+            TravelMode.DRIVING)*/
 
 
         /*googleMap.addMarker(MarkerOptions().position(LatLng(31.68, 76.52)))
