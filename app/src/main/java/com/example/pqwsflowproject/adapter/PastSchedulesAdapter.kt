@@ -3,13 +3,14 @@ package com.example.pqwsflowproject.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Switch
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pqwsflowproject.R
 
 class PastSchedulesAdapter  : RecyclerView.Adapter<PastSchedulesAdapter.ViewHolder>(){
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+        var switch :Switch = itemView.findViewById(R.id.switch1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,6 +24,6 @@ class PastSchedulesAdapter  : RecyclerView.Adapter<PastSchedulesAdapter.ViewHold
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        holder.switch.visibility = View.GONE
     }
 }

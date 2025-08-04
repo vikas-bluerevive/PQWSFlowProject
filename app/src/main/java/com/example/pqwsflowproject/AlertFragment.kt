@@ -50,7 +50,7 @@ class AlertFragment : Fragment() {
         binding.recyclerAlertListing.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,false)
         binding.recyclerAlertListing.adapter = alertAdapter
-        val areaCode = arrayOf("All", "Area 1", "Area2")
+        val areaCode = arrayOf("All", "Urgent", "Maintainess")
         var areaCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,

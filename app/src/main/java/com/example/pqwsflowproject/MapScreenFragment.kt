@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pqwsflowproject.databinding.MapScreenBinding
+import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

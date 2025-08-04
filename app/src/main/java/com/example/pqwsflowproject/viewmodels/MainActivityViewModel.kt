@@ -1,9 +1,14 @@
-package com.example.pqwsflowproject
+package com.example.pqwsflowproject.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pqwsflowproject.model.LocationDetails
+import com.example.pqwsflowproject.model.User
+import com.example.pqwsflowproject.network.Api
+import com.example.pqwsflowproject.network.Repository
 import com.example.pqwsflowproject.utils.JsonParsor
+import com.example.pqwsflowproject.utils.NoInternetException
 import com.google.android.gms.common.api.ApiException
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
@@ -15,26 +20,71 @@ import org.joda.time.DateTime
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class MainActivityViewModel : ViewModel(){
+class MainActivityViewModel : BaseViewModel(){
 
        var  jsonString : MutableLiveData<String> = MutableLiveData()
+
+       var  locations : MutableLiveData<List<LocationDetails>> = MutableLiveData()
+       var  user : MutableLiveData<User> = MutableLiveData()
        var result : MutableLiveData<DirectionsResult> = MutableLiveData()
+
+       var api : Api
+       init {
+           api = Repository.retrofit
+       }
 
        fun getResults( origin: String,
                        destination: String,
                        mode: TravelMode){
 
               viewModelScope.launch(Dispatchers.IO) {
-
                      result.postValue(getDirectionsDetails(origin,destination,mode))
+              }
+       }
+       fun getLocations(){
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
 
+                            locations.value = api.getLocation().body()
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
 
               }
 
-
-
-
        }
+
+       fun getUser(userId :String){
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+
+                            user.value = api.getUser(userId).body()
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+       }
+
+
 
        private fun getDirectionsDetails(
               origin: String,

@@ -25,5 +25,6 @@ object Repository {
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+        .create(Api::class.java)
 
 }

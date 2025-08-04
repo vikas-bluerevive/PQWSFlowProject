@@ -69,6 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <EditText
+            android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
@@ -97,13 +98,14 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
         <EditText
+            android:id="@+id/editPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:focusable="true"
             android:hint="password"
             android:inputType="textPassword"
-            android:maxLength="8"
+            android:maxLength="11"
             android:textColor="@color/white"></EditText>
 
     </RelativeLayout>
