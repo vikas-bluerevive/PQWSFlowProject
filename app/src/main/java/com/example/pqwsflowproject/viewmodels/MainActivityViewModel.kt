@@ -4,6 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pqwsflowproject.model.LocationDetails
+import com.example.pqwsflowproject.model.LocationResponse
+import com.example.pqwsflowproject.model.SourceTankResponse
+import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.User
 import com.example.pqwsflowproject.network.Api
 import com.example.pqwsflowproject.network.Repository
@@ -25,6 +28,10 @@ class MainActivityViewModel : BaseViewModel(){
        var  jsonString : MutableLiveData<String> = MutableLiveData()
 
        var  locations : MutableLiveData<List<LocationDetails>> = MutableLiveData()
+
+       var locationRes :MutableLiveData<LocationResponse> = MutableLiveData()
+       var sourceTankRes :MutableLiveData<SourceTankResponse> = MutableLiveData()
+       var supplyTankRes :MutableLiveData<SupplyTankResponse> = MutableLiveData()
        var  user : MutableLiveData<User> = MutableLiveData()
        var result : MutableLiveData<DirectionsResult> = MutableLiveData()
 
@@ -44,8 +51,8 @@ class MainActivityViewModel : BaseViewModel(){
        fun getLocations(){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-
-                            locations.value = api.getLocation().body()
+                           var res =api.getLocation(0,10).body()
+                            locationRes.postValue(res)
                      }
 
                      /*val response =
@@ -60,6 +67,52 @@ class MainActivityViewModel : BaseViewModel(){
                      feedBackMessage.value = e.message!!
 
               }
+
+       }
+
+       fun getSourceTank(locationId :Int){
+
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.getSourceTank(0,10,locationId).body()
+                            sourceTankRes.postValue(res)
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
+       }
+
+       fun getSupplyTank(sourceTankId:Int){
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.getSupplyTank(0,10,sourceTankId).body()
+                            supplyTankRes.postValue(res)
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
 
        }
 

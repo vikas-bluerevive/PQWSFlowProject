@@ -1,6 +1,7 @@
 package com.example.pqwsflowproject
 
 import android.app.TaskStackBuilder
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.pqwsflowproject.Interface.TileClick
 import com.example.pqwsflowproject.databinding.SettingsScreenBinding
@@ -74,6 +76,15 @@ class SettingFragment : Fragment() {
         binding.imageView7.setOnClickListener {
             tileClick?.tileClick(true)
 
+        }
+        var preference  = activity?.getPreferences(Context.MODE_PRIVATE)
+
+        binding.logoutBack.setOnClickListener {
+            prefs.edit().putBoolean("LoginKey", false).commit()
+            val intent = Intent(binding.logoutBack.context, LoginActivty::class.java)
+
+            ContextCompat.startActivity(binding.logoutBack.context, intent, null)
+            activity?. finish()
         }
 
 

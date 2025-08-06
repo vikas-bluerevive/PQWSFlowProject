@@ -1,13 +1,21 @@
 package com.example.pqwsflowproject.network
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object Repository {
+    val BASE_URL ="https://9cb2942b20b3.ngrok-free.app/api/v1/"
+    var logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     val httpClient: OkHttpClient = OkHttpClient
+        .Builder()
+        .addInterceptor(logging)
+        .build()
+
+   /* val httpClient: OkHttpClient = OkHttpClient
         .Builder()
         .addInterceptor { chain ->
             chain.proceed(
@@ -17,13 +25,14 @@ object Repository {
                 ).build()
             )
         }
-        .build()
+        .build()*/
 
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("https://res.cloudinary.com")
+        .baseUrl(BASE_URL)
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
+        .client(httpClient)
         .build()
         .create(Api::class.java)
 
