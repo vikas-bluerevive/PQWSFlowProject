@@ -91,4 +91,7 @@ dependencies {
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
     implementation ("com.google.firebase:firebase-messaging")
+
+     //tooltip ballon
+    implementation("com.github.skydoves:balloon:1.4.7")
 }

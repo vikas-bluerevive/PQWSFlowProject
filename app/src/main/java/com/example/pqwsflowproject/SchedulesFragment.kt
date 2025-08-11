@@ -7,12 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pqwsflowproject.adapter.AlertAdapter
 import com.example.pqwsflowproject.adapter.PastSchedulesAdapter
 import com.example.pqwsflowproject.adapter.UpcomingSchedulesAdapter
 import com.example.pqwsflowproject.databinding.SchedulesScreenBinding
-import com.example.pqwsflowproject.databinding.TankSchedulerScreenBinding
+import com.example.pqwsflowproject.model.PastItem
+import com.example.pqwsflowproject.model.SchedulesResponse
+import com.example.pqwsflowproject.model.UpcomingItem
+import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +32,12 @@ class SchedulesFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private  var arrayPast : ArrayList<PastItem> = ArrayList()
+    private  var arrayUpcoming : ArrayList<UpcomingItem> = ArrayList()
+
+
     private lateinit var binding : SchedulesScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,16 +58,42 @@ class SchedulesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        var adapter = UpcomingSchedulesAdapter()
+        mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
+        mainActivityViewModel.getAllSchedule(3,2)
+
+        mainActivityViewModel.schedulesResponse.observe(viewLifecycleOwner , Observer {
+            var schedulesResponse : SchedulesResponse? = it
+
+            schedulesResponse?.let{
+                 arrayPast = it.data?.past as ArrayList<PastItem>
+                arrayUpcoming = it.data?.upcoming as ArrayList<UpcomingItem>
+
+                var adapter = UpcomingSchedulesAdapter(arrayUpcoming)
+                binding.recyclerUpcomingListing.layoutManager = LinearLayoutManager(activity,
+                    LinearLayoutManager.VERTICAL,false)
+                binding.recyclerUpcomingListing.adapter = adapter
+
+                var adapter2 = PastSchedulesAdapter(arrayPast)
+                binding.recyclerPastListing.layoutManager = LinearLayoutManager(activity,
+                    LinearLayoutManager.VERTICAL,false)
+                binding.recyclerPastListing.adapter = adapter2
+
+
+            }
+        })
+
+
+       /* var adapter = UpcomingSchedulesAdapter(arrayUpcoming)
         binding.recyclerUpcomingListing.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,false)
         binding.recyclerUpcomingListing.adapter = adapter
 
 
-        var adapter2 = PastSchedulesAdapter()
+        var adapter2 = PastSchedulesAdapter(arrayPast)
         binding.recyclerPastListing.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,false)
-        binding.recyclerPastListing.adapter = adapter2
+        binding.recyclerPastListing.adapter = adapter2*/
 
         binding.newschedulebutton.setOnClickListener{
             val intent =     Intent(binding.newschedulebutton.context, TankScheduleActivity::class.java)

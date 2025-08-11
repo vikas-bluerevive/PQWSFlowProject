@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pqwsflowproject.model.LocationDetails
 import com.example.pqwsflowproject.model.LocationResponse
+import com.example.pqwsflowproject.model.NotificationResponse
+import com.example.pqwsflowproject.model.Schedule
+import com.example.pqwsflowproject.model.ScheduleSucessResponse
+import com.example.pqwsflowproject.model.SchedulesResponse
 import com.example.pqwsflowproject.model.SourceTankResponse
 import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.User
@@ -29,11 +33,17 @@ class MainActivityViewModel : BaseViewModel(){
 
        var  locations : MutableLiveData<List<LocationDetails>> = MutableLiveData()
 
-       var locationRes :MutableLiveData<LocationResponse> = MutableLiveData()
-       var sourceTankRes :MutableLiveData<SourceTankResponse> = MutableLiveData()
-       var supplyTankRes :MutableLiveData<SupplyTankResponse> = MutableLiveData()
+       var locationRes :MutableLiveData<LocationResponse?> = MutableLiveData()
+       var sourceTankRes :MutableLiveData<SourceTankResponse?> = MutableLiveData()
+       var supplyTankRes :MutableLiveData<SupplyTankResponse?> = MutableLiveData()
        var  user : MutableLiveData<User> = MutableLiveData()
        var result : MutableLiveData<DirectionsResult> = MutableLiveData()
+
+       var notificationRes : MutableLiveData<NotificationResponse> = MutableLiveData()
+        var createSchedule : MutableLiveData<ScheduleSucessResponse> = MutableLiveData()
+       var createInstantSchedule : MutableLiveData<ScheduleSucessResponse> = MutableLiveData()
+
+       var schedulesResponse  : MutableLiveData<SchedulesResponse> = MutableLiveData()
 
        var api : Api
        init {
@@ -98,6 +108,120 @@ class MainActivityViewModel : BaseViewModel(){
                      viewModelScope.launch(Dispatchers.IO) {
                             var res =api.getSupplyTank(0,10,sourceTankId).body()
                             supplyTankRes.postValue(res)
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
+
+       }
+
+       fun createScedule(sourceId :Int , supplyId:Int,scheduleTime:String){
+
+              var schedule = Schedule(sourceId,supplyId,scheduleTime)
+
+              progressBar.value= true
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.createSchedule(schedule)
+                            createSchedule.postValue(res.body())
+                            //supplyTankRes.postValue(res)
+                            viewModelScope.launch(Dispatchers.Main){
+                                   progressBar.value= false
+                            }
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
+
+       }
+
+       fun createInstantSchedule(sourceId:Int ,supplyId:Int){
+              val body = mapOf(
+                     "sourceDeviceId" to sourceId,
+                     "targetDeviceId" to supplyId
+              )
+              progressBar.value= true
+
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.createInstantSchedule(body)
+                            //supplyTankRes.postValue(res)
+                            createInstantSchedule.postValue(res.body())
+
+                            viewModelScope.launch(Dispatchers.Main){
+                                   progressBar.value= false
+                            }
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
+
+       }
+
+       fun getAllSchedule(sourceId: Int,supplyId: Int){
+
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.getAllSchedules(sourceId,supplyId)
+                            schedulesResponse.postValue(res.body())
+
+                           // sourceTankRes.postValue(res)
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
+       }
+
+       fun getNotifications(){
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.getNotifications(0,10)
+                            // sourceTankRes.postValue(res)
+                            notificationRes.postValue(res.body())
                      }
 
                      /*val response =

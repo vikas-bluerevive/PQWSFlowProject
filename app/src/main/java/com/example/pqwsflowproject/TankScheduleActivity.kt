@@ -5,10 +5,19 @@ import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.pqwsflowproject.databinding.ActivityTankScheduleBinding
+import com.example.pqwsflowproject.model.ScheduleSucessResponse
+import com.example.pqwsflowproject.utils.CommonFunction
+import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -26,6 +35,9 @@ class TankScheduleActivity : FragmentActivity() {
     private var  date_time :String = ""
     private lateinit var  datePickerDialog :DatePickerDialog
     private  lateinit var  timePickerDialog: TimePickerDialog
+
+    private lateinit var mainActivityViewModel: MainActivityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val prefs =
             PreferenceManager.getDefaultSharedPreferences(this)
@@ -40,6 +52,8 @@ class TankScheduleActivity : FragmentActivity() {
         binding = ActivityTankScheduleBinding.inflate(layoutInflater)
         setContentView(binding.root)
        // setContentView(R.layout.activity_tank_schedule)
+        mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
 
 
 
@@ -52,6 +66,35 @@ class TankScheduleActivity : FragmentActivity() {
             )
 
         binding.spinner2.adapter = instantWaterCodeAdapter
+
+        binding.spinner2.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                p0: AdapterView<*>?,
+                p1: View?,
+                p2: Int,
+                p3: Long
+            ) {
+               if(p2 == 1){
+                   binding.editTimeSchedule.isEnabled = false
+
+               }else if(p2 ==2){
+                   binding.editTimeSchedule.isEnabled = true
+               }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        })
+
+        mainActivityViewModel.progressBar.observe(this, Observer<Boolean> {
+            if (it) {
+                CommonFunction.showProgressBar(this,"Loading..")
+            } else {
+                CommonFunction.hideProgressBar()
+            }
+        })
 
         /*var timeScheduleWaterSupplyCode = arrayOf("Time Schedule Water Supply", "time1", "time2","time3")
         var timeScheduleWaterSupplyCodeAdapter =
@@ -73,7 +116,24 @@ class TankScheduleActivity : FragmentActivity() {
 
             }
 
+
         })*/
+
+        mainActivityViewModel.createSchedule.observe(this,Observer{
+            var scheduleSucessResponse : ScheduleSucessResponse? = it
+            scheduleSucessResponse?.let{
+
+                Toast.makeText(this,it.data , Toast.LENGTH_LONG).show()
+            }
+        })
+
+        mainActivityViewModel.createInstantSchedule.observe(this, Observer{
+            var scheduleSucessResponse  : ScheduleSucessResponse? = it
+            scheduleSucessResponse?.let{
+                Toast.makeText(this,it.data , Toast.LENGTH_LONG).show()
+            }
+
+        })
 
         binding.editTimeSchedule.setOnClickListener {
             datePicker()
@@ -92,6 +152,27 @@ class TankScheduleActivity : FragmentActivity() {
 
 
         binding.spinner4.adapter = waterToBeFilledCodeAdapter
+
+
+        binding.materialButton3.setOnClickListener {
+            var spinnerInstantSelection = binding.spinner2.selectedItemPosition
+
+            Log.e("InstantCheck","Instant checks are "+binding.editTimeSchedule.text.toString().equals("") + "  "+spinnerInstantSelection)
+            if(!binding.editTimeSchedule.text.toString().equals(" ")){
+
+                if(spinnerInstantSelection == 2){
+
+                  mainActivityViewModel.createScedule(3,2,binding.editTimeSchedule.text.toString())
+                }else if(spinnerInstantSelection == 1){
+                    mainActivityViewModel.createInstantSchedule(3,2)
+
+                }
+            }else{
+
+
+            }
+
+        }
 
 
         val lineChart = binding.lineChart
@@ -137,6 +218,8 @@ class TankScheduleActivity : FragmentActivity() {
                 val mydate = "" + gmtFormat.format(calendar.time)
                // binding.editTimeSchedule.setText(date_time + " " + hourOfDay + ":" + minute)
                 binding.editTimeSchedule.setText(mydate)
+
+                Log.e("DateTime","date time set is "+mydate)
                 //et_show_date_time.setText()
             }, mHour, mMinute, false
         )

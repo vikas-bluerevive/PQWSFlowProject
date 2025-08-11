@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object Repository {
-    val BASE_URL ="https://9cb2942b20b3.ngrok-free.app/api/v1/"
+    val BASE_URL ="https://68d17a05b215.ngrok-free.app/api/v1/"
     var logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     val httpClient: OkHttpClient = OkHttpClient

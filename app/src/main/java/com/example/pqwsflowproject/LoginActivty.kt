@@ -74,6 +74,13 @@ class LoginActivty: FragmentActivity() {
                 /*val intent =     Intent(binding.materialButton3.context, MainActivity::class.java)
 
                 ContextCompat.startActivity(binding.materialButton3.context, intent, null)*/
+
+               /* prefs.edit().putBoolean("LoginKey", true).commit()
+                val intent = Intent(binding.materialButton3.context, MainActivity::class.java)
+
+                ContextCompat.startActivity(binding.materialButton3.context, intent, null)
+                finish()*/
+
             }
 
 
@@ -97,7 +104,7 @@ class LoginActivty: FragmentActivity() {
 
             loginRes?.let {
                   if(it.success ==true) {
-                      prefs.edit().putBoolean("LoginKey", true).commit()
+                      prefs.edit()     .putBoolean("LoginKey", true).commit()
                       val intent = Intent(binding.materialButton3.context, MainActivity::class.java)
 
                       ContextCompat.startActivity(binding.materialButton3.context, intent, null)
