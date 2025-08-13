@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -111,6 +112,15 @@ class MainActivity : FragmentActivity() {
                                 }
                             }
                         })
+
+                        it.TileClick2(object:  TileClick{
+                            override fun tileClick(click: Boolean) {
+                                if(click){
+                                    binding.bottomNavigation.setSelectedItemId(R.id.page_1);
+                                }
+                            }
+
+                        })
                     }
                     val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
                     ft.replace(binding.frameid.id, newFragment).commit()
@@ -151,7 +161,14 @@ class MainActivity : FragmentActivity() {
                 }
             }
         }*/
+
+
+
+
     }
+
+
+
 fun Activity.setTheme(night :Boolean) {
 
     // Or even have more than two theme styles

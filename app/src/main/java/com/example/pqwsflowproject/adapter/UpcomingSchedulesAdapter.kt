@@ -1,5 +1,6 @@
 package com.example.pqwsflowproject.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,8 +43,9 @@ class UpcomingSchedulesAdapter(var arrayUpcoming: ArrayList<UpcomingItem>) : Rec
            calendar.setTime(date);
 
            var days = arrayOf( "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY" )
+           Log.e("DayPresented","daypresented "+calendar.get(Calendar.DAY_OF_WEEK))
+           var day = days[calendar.get(Calendar.DAY_OF_WEEK)-1]
 
-           var day = days[calendar.get(Calendar.DAY_OF_WEEK)]
            dayText.setText(day)
            var sdf =SimpleDateFormat("HH:mm aa", Locale.getDefault())
            currentTime = sdf.format(date)

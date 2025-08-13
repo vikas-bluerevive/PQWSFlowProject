@@ -14,6 +14,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pqwsflowproject.adapter.TankAdapter
+import com.example.pqwsflowproject.adapter.TimeSlotAndWaterLevelAdapter
 import com.example.pqwsflowproject.databinding.ActivityTankScheduleBinding
 import com.example.pqwsflowproject.model.ScheduleSucessResponse
 import com.example.pqwsflowproject.utils.CommonFunction
@@ -76,9 +79,14 @@ class TankScheduleActivity : FragmentActivity() {
             ) {
                if(p2 == 1){
                    binding.editTimeSchedule.isEnabled = false
+                   binding.relativeLayout2.visibility =  View.GONE
 
                }else if(p2 ==2){
                    binding.editTimeSchedule.isEnabled = true
+                   binding.relativeLayout2.visibility = View.VISIBLE
+               }else {
+                   binding.editTimeSchedule.isEnabled = true
+                   binding.relativeLayout2.visibility = View.VISIBLE
                }
             }
 
@@ -175,9 +183,41 @@ class TankScheduleActivity : FragmentActivity() {
         }
 
 
+        var waterLevelAndTimeSlotAdapter = TimeSlotAndWaterLevelAdapter()
+        binding.recyclerTimeAndlevelListing?.let {
+            it.layoutManager = LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL,false)
+        }
+        binding.recyclerTimeAndlevelListing?.let { it.adapter = waterLevelAndTimeSlotAdapter }
+
+        val c: Calendar = Calendar.getInstance()
+        var mYear = c.get(Calendar.YEAR)
+        var mMonth = c.get(Calendar.MONTH)
+        var mDay = c.get(Calendar.DAY_OF_MONTH)
+
+        binding.dateText?.setText(""+mDay+"-"+"0"+(mMonth+1)+"-"+mYear)
+        binding.imageView12?.setOnClickListener {
+
+            datePickerCalender(mYear,mMonth,mDay)
+        }
+
         val lineChart = binding.lineChart
         setupLineChartStyle(lineChart)
         loadChartData(lineChart)
+    }
+
+    private fun datePickerCalender(mYear: Int, mMonth: Int, mDay: Int) {
+
+        var datePickerDialog2 = DatePickerDialog(this,
+            { view, year, monthOfYear, dayOfMonth ->
+                date_time = dayOfMonth.toString() + "-"+"0" + (monthOfYear + 1) + "-" + year
+                //*************Call Time Picker Here ********************
+                binding.dateText?.setText(date_time)
+            }, mYear, mMonth, mDay
+        )
+        datePickerDialog2.show()
+        datePickerDialog2.getDatePicker().setMaxDate(System.currentTimeMillis());
+
     }
 
 

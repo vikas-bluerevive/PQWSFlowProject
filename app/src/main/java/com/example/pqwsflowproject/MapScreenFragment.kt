@@ -1,7 +1,10 @@
 package com.example.pqwsflowproject
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pqwsflowproject.databinding.MapScreenBinding
+import com.example.pqwsflowproject.model.ContentItem3
+import com.example.pqwsflowproject.model.LocationResponse
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -52,6 +57,12 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mainActivityViewModel: MainActivityViewModel
     private var googleMap: GoogleMap? = null
     private var mMap: MapView? = null
+
+    private lateinit var contentLocation : MutableList<ContentItem3>
+
+    private var areaArray : ArrayList<String> = ArrayList()
+
+    private lateinit var pref: SharedPreferences
 
     private val overview = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,7 +122,31 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        pref = activity?.getSharedPreferences("PrefMode", MODE_PRIVATE)!!
+        areaArray.add("Select Area")
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        mainActivityViewModel.getLocations()
+
+        mainActivityViewModel.locationRes.observe(viewLifecycleOwner, Observer {
+            var locRes :LocationResponse? = it
+            locRes?.let {
+
+
+                contentLocation = it.data?.content as MutableList<ContentItem3>
+
+                areaArray.clear()
+                areaArray.add("Select Area")
+                if(contentLocation.isEmpty()== false){
+
+                    for(items in contentLocation){
+                        items.district?.let { areaArray.add(it) }
+
+                    }
+                }
+            }
+
+
+        })
 
        /* mainActivityViewModel.jsonString.observe(viewLifecycleOwner, Observer {
            drawPath(it)
@@ -129,7 +164,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
             ArrayAdapter<CharSequence>(
                 it,
                 androidx.appcompat. R.layout.support_simple_spinner_dropdown_item,
-                areaCode
+                areaArray as List<CharSequence>
             )
         }
         binding.spinner2.adapter = areaCodeAdapter
@@ -172,6 +207,14 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
 
         val address: Address? = addresses?.get(0)
        var result =  address?.getAddressLine(0) + ", " + address?.getLocality()
+
+
+
+        var url = pref.getString("ImageUri","")
+//        var uri : Uri = url as Uri
+        val imageUri = Uri.parse(url)
+
+        binding.imageView1.setImageURI(imageUri)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

@@ -94,7 +94,7 @@ class AlertAdapter(
 
         holder.alertTile.setOnClickListener{
            // balloon?.showAlignTop()
-            balloon?.showAsDropDown(holder.tank2Text)
+            balloon?.showAsDropDown(holder.tanktext)
         }
 
     }

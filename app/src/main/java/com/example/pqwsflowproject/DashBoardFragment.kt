@@ -1,15 +1,25 @@
 package com.example.pqwsflowproject
 
+import android.app.Activity
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.pqwsflowproject.Interface.TileClick
 import com.example.pqwsflowproject.adapter.TankAdapter
 import com.example.pqwsflowproject.databinding.DashboardScreenBinding
@@ -20,6 +30,8 @@ import com.example.pqwsflowproject.model.SourceTankResponse
 import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.TanKData
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
+import com.github.dhaval2404.imagepicker.ImagePicker
+import java.net.URI
 
 /**
  * A simple [Fragment] subclass.
@@ -46,7 +58,16 @@ class DashBoardFragment : Fragment() {
     private var tankArrayList : ArrayList<TanKData> = ArrayList()
 
     private var supplyTankArray : ArrayList<String> = ArrayList()
-     var tileClick :TileClick?=null
+
+    private  lateinit var mProfileUri :Uri
+
+    //private  var prefs : PreferenceManager ? = null
+
+    private lateinit var pref: SharedPreferences
+    var tileClick :TileClick?=null
+
+
+   ;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +88,9 @@ class DashBoardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+         //prefs = PreferenceManager.getDefaultSharedPreferences(activity) as PreferenceManager?
+        pref = activity?.getSharedPreferences("PrefMode", MODE_PRIVATE)!!;
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
         mainActivityViewModel.getLocations()
@@ -79,6 +103,8 @@ class DashBoardFragment : Fragment() {
             locRes?.let {
 
                 contentLocation = it.data?.content as MutableList<ContentItem3>
+                areaArray.clear()
+                areaArray.add("Select Area")
                 if(contentLocation.isEmpty()== false){
 
                     for(items in contentLocation){
@@ -249,6 +275,80 @@ class DashBoardFragment : Fragment() {
             LinearLayoutManager.VERTICAL,false)
        binding.recyclerTankersListing.adapter = adapter*/
 
+        var url = pref.getString("ImageUri","")
+//        var uri : Uri = url as Uri
+        val imageUri = Uri.parse(url)
+
+        binding.imageView1.setImageURI(imageUri)
+
+        binding.imageView1.setOnClickListener {
+           // galleryLauncher.launch("image/*")
+
+            ImagePicker.with(this)
+                .compress(1024)         //Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)  //Final image resolution will be less than 1080 x 1080(Optional)
+                .createIntent { intent ->
+                    startForProfileImageResult.launch(intent)
+                }
+        }
+
+        binding.materialButton3.setOnClickListener {
+
+            val intent =     Intent( binding.materialButton3.context, TankScheduleActivity::class.java)
+
+            ContextCompat.startActivity( binding.materialButton3.context, intent, null)
+        }
+
+
+
+
+
+                /* @Override
+                 public void onActivityResult(Uri o) {
+                     if (o == null) {
+                         Toast.makeText(MainActivity.this, "No image Selected", Toast.LENGTH_SHORT)
+                             .show();
+                     } else {
+                         Glide.with(getApplicationContext()).load(o).into(imageView);
+                     }
+                 }*/
+//});
+
+
+
+
+    }
+
+    private val startForProfileImageResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val resultCode = result.resultCode
+            val data = result.data
+
+            if (resultCode == Activity.RESULT_OK) {
+                //Image Uri will not be null for RESULT_OK
+                val fileUri = data?.data!!
+
+                 mProfileUri = fileUri
+                pref.edit().putString("ImageUri", mProfileUri.toString()).commit()
+                binding.imageView1.setImageURI(fileUri)
+            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                Toast.makeText(activity, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity, "Task Cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
+    val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        val galleryUri = it
+        try{
+            activity?.let { it1 -> Glide.with(it1) }?.load(it)?.into(binding.imageView1);
+            pref.edit().putString("ImageUri", galleryUri.toString() ).commit()
+            // binding.image.setImageURI(galleryUri)
+        }catch(e:Exception){
+            e.printStackTrace()
+        }
 
     }
     open fun TileClick(tileClicked: TileClick){

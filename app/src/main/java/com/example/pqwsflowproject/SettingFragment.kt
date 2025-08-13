@@ -2,7 +2,10 @@ package com.example.pqwsflowproject
 
 import android.app.TaskStackBuilder
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.Settings
@@ -33,6 +36,9 @@ class SettingFragment : Fragment() {
     private var bool :Boolean = false
 
     var tileClick :TileClick?=null
+    var tileClick2 :TileClick?=null
+
+    private lateinit var pref: SharedPreferences
     private lateinit var binding : SettingsScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +60,7 @@ class SettingFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        pref = activity?.getSharedPreferences("PrefMode", MODE_PRIVATE)!!
         binding.constraint1.setOnClickListener{
             val settingsIntent: Intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -73,9 +79,22 @@ class SettingFragment : Fragment() {
             binding.textView30.setText("Light")
         }
 
+
         binding.imageView7.setOnClickListener {
             tileClick?.tileClick(true)
 
+        }
+
+        var url = pref.getString("ImageUri","")
+//        var uri : Uri = url as Uri
+        val imageUri = Uri.parse(url)
+
+        binding.imageView1.setImageURI(imageUri)
+
+
+
+        binding.imageView11.setOnClickListener {
+            tileClick2?.tileClick(true)
         }
         var preference  = activity?.getPreferences(Context.MODE_PRIVATE)
 
@@ -134,6 +153,10 @@ class SettingFragment : Fragment() {
 
     open fun TileClick(tileClicked: TileClick){
         tileClick = tileClicked
+    }
+
+    open fun TileClick2(tileClicked2: TileClick){
+        tileClick2 = tileClicked2
     }
 
 

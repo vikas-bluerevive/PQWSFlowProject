@@ -10,6 +10,7 @@ import com.example.pqwsflowproject.model.Schedule
 import com.example.pqwsflowproject.model.ScheduleSucessResponse
 import com.example.pqwsflowproject.model.SchedulesResponse
 import com.example.pqwsflowproject.model.SourceTankResponse
+import com.example.pqwsflowproject.model.SummaryResponse
 import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.User
 import okhttp3.ResponseBody
@@ -61,6 +62,8 @@ interface Api {
     @GET("tank/source")
     suspend fun getSourceTank(@Query("page") page: Int?,@Query("size") size: Int?,@Query("locationId") locId :Int?):Response<SourceTankResponse>
 
+    @GET("flow/{deviceId}/summary")
+    suspend fun getSummary(@Path("deviceId")deviceId :Int,@Query("date") date :Int) : Response<SummaryResponse>
     @GET("tank/supply")
     suspend fun getSupplyTank(@Query("page") page: Int?,@Query("size") size: Int?,@Query("sourceTankId") sourceTankId :Int?):Response<SupplyTankResponse>
 

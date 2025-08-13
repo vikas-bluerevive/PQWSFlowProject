@@ -19,6 +19,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="27dp"
             android:text="Tank "
+            android:fontFamily="@font/roboto_variablefont"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -32,6 +33,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="FarmHouse"
+            android:fontFamily="@font/roboto_variablefont"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,6 +48,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="19dp"
             android:text="Current Level :85%"
+            android:fontFamily="@font/roboto_variablefont"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10">

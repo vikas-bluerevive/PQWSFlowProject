@@ -76,6 +76,11 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation( "androidx.activity:activity-ktx:1.2.3")
+    implementation ("androidx.fragment:fragment-ktx:1.3.3")
+
+    implementation("com.github.dhaval2404:imagepicker:2.1")
+
     implementation("com.google.maps:google-maps-services:0.1.20")
     implementation( "com.google.maps.android:android-maps-utils:0.5")
 
@@ -94,4 +99,6 @@ dependencies {
 
      //tooltip ballon
     implementation("com.github.skydoves:balloon:1.4.7")
+    //glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
