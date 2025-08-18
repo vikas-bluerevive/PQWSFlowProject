@@ -3,6 +3,8 @@ package com.example.pqwsflowproject.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pqwsflowproject.model.DeviceLocationResponse
+import com.example.pqwsflowproject.model.DevicesResponse
 import com.example.pqwsflowproject.model.LocationDetails
 import com.example.pqwsflowproject.model.LocationResponse
 import com.example.pqwsflowproject.model.NotificationResponse
@@ -45,6 +47,9 @@ class MainActivityViewModel : BaseViewModel(){
 
        var schedulesResponse  : MutableLiveData<SchedulesResponse> = MutableLiveData()
 
+       var devicesResponse : MutableLiveData<DevicesResponse> = MutableLiveData()
+       var deviceStatusAndResponse : MutableLiveData<DeviceLocationResponse> = MutableLiveData()
+
        var api : Api
        init {
            api = Repository.retrofit
@@ -61,8 +66,11 @@ class MainActivityViewModel : BaseViewModel(){
        fun getLocations(){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                           var res =api.getLocation(0,10).body()
-                            locationRes.postValue(res)
+                           var res : LocationResponse?  =api.getLocation(0,10).body()
+                            res?.let{
+                                   locationRes.postValue(it)
+                            }
+
                      }
 
                      /*val response =
@@ -84,8 +92,11 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.getSourceTank(0,10,locationId).body()
-                            sourceTankRes.postValue(res)
+                            var res : SourceTankResponse? =api.getSourceTank(0,10,locationId).body()
+                            res?.let{
+                                   sourceTankRes.postValue(it)
+                            }
+
                      }
 
                      /*val response =
@@ -213,6 +224,58 @@ class MainActivityViewModel : BaseViewModel(){
                      feedBackMessage.value = e.message!!
 
               }
+
+       }
+
+
+       fun getDeviceByCity(city:String){
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.getDevicesByCity(city,0,20)
+                            devicesResponse.postValue(res.body())
+
+                            // sourceTankRes.postValue(res)
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
+       }
+
+       fun getDeviceLocationAndStatus(deviceId : String){
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.getDeviceLocationAndStatus(deviceId)
+                            deviceStatusAndResponse.postValue(res.body())
+
+                            // sourceTankRes.postValue(res)
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
+
+
 
        }
 

@@ -31,7 +31,6 @@ import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.TanKData
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
-import java.net.URI
 
 /**
  * A simple [Fragment] subclass.
@@ -64,6 +63,12 @@ class DashBoardFragment : Fragment() {
     //private  var prefs : PreferenceManager ? = null
 
     private lateinit var pref: SharedPreferences
+
+
+    private  var areaCodeAdapter : ArrayAdapter<CharSequence>? = null
+    private var  sourceTankCodeAdapter: ArrayAdapter<CharSequence>? = null
+    private var supplyTankCodeAdapter : ArrayAdapter<CharSequence>? = null
+
     var tileClick :TileClick?=null
 
 
@@ -111,6 +116,11 @@ class DashBoardFragment : Fragment() {
                         items.district?.let { areaArray.add(it) }
 
                     }
+                    activity?.runOnUiThread {
+
+                        areaCodeAdapter?.notifyDataSetChanged()
+                    }
+
                 }
 
             }
@@ -130,6 +140,11 @@ class DashBoardFragment : Fragment() {
                         items.name?.let { it1 -> sourceTankArray.add(it1) }
 
 
+                    }
+
+                    activity?.runOnUiThread {
+
+                        sourceTankCodeAdapter?.notifyDataSetChanged()
                     }
                 }
 
@@ -158,14 +173,16 @@ class DashBoardFragment : Fragment() {
                           value.name,
                           value.type,
                           value.currentLevel,
-                          R.drawable.tank_image2
+                          R.drawable.tank_image2,
+                           value.id
                       )
                   }else {
                        tankItem = TanKData(
                           value.name,
                           value.type,
                           value.currentLevel,
-                          R.drawable.tank_image
+                          R.drawable.tank_image,
+                           value.id
                       )
                   }
                   tankArrayList.add(tankItem)
@@ -174,8 +191,12 @@ class DashBoardFragment : Fragment() {
 
 
                }
+               activity?.runOnUiThread {
+
+                   supplyTankCodeAdapter?.notifyDataSetChanged()
+               }
            }
-          var tankAdapter = TankAdapter(tankArrayList)
+          var tankAdapter = TankAdapter(tankArrayList,pref)
            binding.recyclerTankersListing.layoutManager = LinearLayoutManager(activity,
                LinearLayoutManager.VERTICAL,false)
            binding.recyclerTankersListing.adapter = tankAdapter
@@ -191,7 +212,7 @@ class DashBoardFragment : Fragment() {
 
 
         val areaCode = arrayOf("Select Area", "Area1", "Area2", "Area3")
-        var areaCodeAdapter = activity?.let {
+        areaCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
@@ -216,7 +237,7 @@ class DashBoardFragment : Fragment() {
 
         })
         val sourceTankCode = arrayOf("Select Source Tank", "Tank1", "Tank2", "Tank3")
-        var sourceTankCodeAdapter = activity?.let {
+        sourceTankCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
@@ -228,7 +249,12 @@ class DashBoardFragment : Fragment() {
         binding.spinner3.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if(p2 != 0){
-                     mainActivityViewModel.getSupplyTank(3)
+                    if (::contentSourceTank.isInitialized) {
+                     var sourceid =   contentSourceTank.get(p2-1).id
+                        sourceid?.let { mainActivityViewModel.getSupplyTank(it) }
+                        sourceid?.let { pref.edit().putInt("sourceId",it) }?.commit()
+                    }
+
 
                 }else{
 
@@ -249,7 +275,7 @@ class DashBoardFragment : Fragment() {
 
         val supplyTankCode = arrayOf("Select Supply Tank", "Tank1", "Tank2", "Tank3")
 
-        var supplyTankCodeAdapter = activity?.let {
+         supplyTankCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
@@ -259,7 +285,25 @@ class DashBoardFragment : Fragment() {
 
         binding.spinner4.adapter = supplyTankCodeAdapter
 
+         binding.spinner4.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener{
+             override fun onItemSelected(
+                 p0: AdapterView<*>?,
+                 p1: View?,
+                 p2: Int,
+                 p3: Long
+             ) {
+                 if (::contentSupplyTank.isInitialized) {
+                     var supplyid =   contentSupplyTank.get(p2-1).id
 
+                     supplyid?.let { pref.edit().putInt("supplyId",it) }?.commit()
+                 }
+             }
+
+             override fun onNothingSelected(p0: AdapterView<*>?) {
+
+             }
+
+         })
         /*var adapter = TankAdapter(tankArrayList)
         adapter.setInterface(object  : TileClick{
             override fun tileClick(click: Boolean) {

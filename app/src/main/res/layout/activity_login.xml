@@ -14,7 +14,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="95dp"
         android:text="PQWZ App Technologies"
-        android:fontFamily="@font/roboto_variablefont"
+        android:fontFamily="@font/nunito_variablefont_wght"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,20 +26,34 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:layout_marginTop="38dp"
-        android:src="@drawable/pqwslogo"
+        android:src="@drawable/pqwslogo_removebg"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
     </ImageView>
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="79dp"
+
+        android:fontFamily="@font/nunito_variablefont_wght"
+        android:text="Every Drop Matters !"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+    </TextView>
+
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="46dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="70dp"
         android:text="Login to your account"
-        android:fontFamily="@font/roboto_variablefont"
+        android:fontFamily="@font/nunito_variablefont_wght"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,9 +63,9 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="21dp"
-        android:fontFamily="@font/roboto_variablefont"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/nunito_variablefont_wght"
         android:text="Enter your email to login into the app"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
         android:layout_weight=".28"
         android:background="@drawable/transparent_border"
@@ -152,7 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="40dp"
-        android:fontFamily="@font/roboto_variablefont"
+        android:fontFamily="@font/nunito_variablefont_wght"
         android:text="By clicking continue ,you agree to our "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialButton4"></TextView>
@@ -164,7 +178,7 @@
         android:layout_marginTop="40dp"
         android:text="Terms of Service"
         android:textStyle="bold"
-        android:fontFamily="@font/roboto_variablefont"
+        android:fontFamily="@font/nunito_variablefont_wght"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/materialButton4"></TextView>
 
@@ -174,7 +188,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="98dp"
         android:text="and"
-        android:fontFamily="@font/roboto_variablefont"
+        android:fontFamily="@font/nunito_variablefont_wght"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"></TextView>
 
@@ -183,7 +197,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="Privacy Policy"
-        android:fontFamily="@font/roboto_variablefont"
+        android:fontFamily="@font/nunito_variablefont_wght"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView38"
         app:layout_constraintTop_toBottomOf="@+id/textView5">

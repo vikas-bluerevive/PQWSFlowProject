@@ -28,6 +28,7 @@
         </service>
 
         <activity
+            android:theme="@style/Theme.MyAppTheme"
             android:name=".TankScheduleActivity"
             android:exported="false"></activity>
 

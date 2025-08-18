@@ -2,7 +2,9 @@ package com.example.pqwsflowproject
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.SharedPreferences
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -41,6 +43,8 @@ class TankScheduleActivity : FragmentActivity() {
 
     private lateinit var mainActivityViewModel: MainActivityViewModel
 
+    private lateinit var pref: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val prefs =
             PreferenceManager.getDefaultSharedPreferences(this)
@@ -57,7 +61,7 @@ class TankScheduleActivity : FragmentActivity() {
        // setContentView(R.layout.activity_tank_schedule)
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
-
+        pref = getSharedPreferences("PrefMode", MODE_PRIVATE)
 
 
         val instantWaterCode = arrayOf("Instant Water Supply", "true", "false")
@@ -103,6 +107,7 @@ class TankScheduleActivity : FragmentActivity() {
                 CommonFunction.hideProgressBar()
             }
         })
+        binding.normalContinuousSlider?.value = 3000F
 
         /*var timeScheduleWaterSupplyCode = arrayOf("Time Schedule Water Supply", "time1", "time2","time3")
         var timeScheduleWaterSupplyCodeAdapter =
@@ -159,7 +164,7 @@ class TankScheduleActivity : FragmentActivity() {
             )
 
 
-        binding.spinner4.adapter = waterToBeFilledCodeAdapter
+        binding.spinner4?.adapter = waterToBeFilledCodeAdapter
 
 
         binding.materialButton3.setOnClickListener {
@@ -170,9 +175,9 @@ class TankScheduleActivity : FragmentActivity() {
 
                 if(spinnerInstantSelection == 2){
 
-                  mainActivityViewModel.createScedule(3,2,binding.editTimeSchedule.text.toString())
+                  mainActivityViewModel.createScedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0),binding.editTimeSchedule.text.toString())
                 }else if(spinnerInstantSelection == 1){
-                    mainActivityViewModel.createInstantSchedule(3,2)
+                    mainActivityViewModel.createInstantSchedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0))
 
                 }
             }else{
@@ -204,6 +209,12 @@ class TankScheduleActivity : FragmentActivity() {
         val lineChart = binding.lineChart
         setupLineChartStyle(lineChart)
         loadChartData(lineChart)
+
+        var url = pref.getString("ImageUri","")
+//        var uri : Uri = url as Uri
+        val imageUri = Uri.parse(url)
+
+        binding.imageView1.setImageURI(imageUri)
     }
 
     private fun datePickerCalender(mYear: Int, mMonth: Int, mDay: Int) {

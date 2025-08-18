@@ -4,6 +4,9 @@
     <style name="Theme.PQWSFlowProject" parent="android:Theme.Material.Light.NoActionBar" />
     <style name="Theme.PQWSFlowProject2" parent="Theme.AppCompat.Light.NoActionBar" />
     <style name="Theme.PQWSFlowProject3" parent="Theme.AppCompat.NoActionBar" />
+
+    <style name="Theme.MyAppTheme" parent="Theme.MaterialComponents.Light"/>
+    <style name="Theme.MyAppTheme2" parent="Theme.Material3.DayNight"/>
     <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/rounded_shape</item>
     </style>

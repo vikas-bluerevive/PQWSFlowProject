@@ -1,5 +1,6 @@
 package com.example.pqwsflowproject
 
+import android.app.Activity
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -12,11 +13,15 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.pqwsflowproject.Interface.TileClick
 import com.example.pqwsflowproject.databinding.SettingsScreenBinding
+import com.github.dhaval2404.imagepicker.ImagePicker
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -39,6 +44,8 @@ class SettingFragment : Fragment() {
     var tileClick2 :TileClick?=null
 
     private lateinit var pref: SharedPreferences
+
+    private  lateinit var mProfileUri :Uri
     private lateinit var binding : SettingsScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,6 +156,18 @@ class SettingFragment : Fragment() {
             }
         }
 
+
+        binding.imageView1.setOnClickListener {
+            // galleryLauncher.launch("image/*")
+
+            ImagePicker.with(this)
+                .compress(1024)         //Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)  //Final image resolution will be less than 1080 x 1080(Optional)
+                .createIntent { intent ->
+                    startForProfileImageResult.launch(intent)
+                }
+        }
+
     }
 
     open fun TileClick(tileClicked: TileClick){
@@ -159,7 +178,24 @@ class SettingFragment : Fragment() {
         tileClick2 = tileClicked2
     }
 
+    private val startForProfileImageResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val resultCode = result.resultCode
+            val data = result.data
 
+            if (resultCode == Activity.RESULT_OK) {
+                //Image Uri will not be null for RESULT_OK
+                val fileUri = data?.data!!
+
+                mProfileUri = fileUri
+                pref.edit().putString("ImageUri", mProfileUri.toString()).commit()
+                binding.imageView1.setImageURI(fileUri)
+            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                Toast.makeText(activity, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity, "Task Cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
     companion object {
         /**
          * Use this factory method to create a new instance of

@@ -12,7 +12,7 @@
         android:layout_marginStart="135dp"
         android:layout_marginTop="33dp"
         android:text="Alerts"
-        android:fontFamily="@font/roboto_variablefont"
+        android:fontFamily="@font/nunito_variablefont_wght"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

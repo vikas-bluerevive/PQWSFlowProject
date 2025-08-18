@@ -41,7 +41,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="25dp"
         android:text="Tank Name"
-        android:fontFamily="@font/roboto_variablefont"
+        android:fontFamily="@font/nunito_variablefont_wght"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -131,19 +131,52 @@
         android:id="@+id/relativeLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
 
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_weight=".28"
-        android:background="@drawable/border_grey"
+
         android:orientation="horizontal"
-        android:padding="10dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+        <TextView
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="Water Contains in Liters"></TextView>
 
-        <Spinner
+        <com.google.android.material.slider.Slider
+            android:layout_weight="1"
+            android:id="@+id/normalContinuousSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:valueFrom="0.0"
+            android:valueTo="4000.0"
+            android:stepSize="100.0"
+            app:labelBehavior="visible"
+            app:haloColor="@color/blue"
+            app:thumbColor="@color/blue"
+            app:thumbStrokeColor="@color/grey"
+            app:tickColor="@color/blue"
+            app:tickColorActive="@color/blue"
+            app:tickColorInactive="@color/grey"
+            app:trackColorActive="@color/blue"
+            app:trackColorInactive="#a7bada"></com.google.android.material.slider.Slider>
+        <TextView
+            android:visibility="gone"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4000 Liters"></TextView>
+
+       <!-- <Spinner
             android:id="@+id/spinner4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -152,7 +185,7 @@
             android:gravity="center"
             android:spinnerMode="dropdown"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="143dp" />
+            tools:layout_editor_absoluteY="143dp" />-->
 
     </RelativeLayout>
     <Button
@@ -320,7 +353,8 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/nunito_variablefont_wght"
             android:text="Daily Flow By Hour"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -339,9 +373,10 @@
             android:id="@+id/dateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="17dp"
-            android:layout_marginEnd="19dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
             android:text="13-07-2025"
+            android:fontFamily="@font/nunito_variablefont_wght"
             app:layout_constraintEnd_toStartOf="@+id/imageView12"
             app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -349,8 +384,8 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:background="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -360,9 +395,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
                 android:text="Time Slot"
+                android:fontFamily="@font/roboto_variablefont"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -370,7 +406,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/roboto_variablefont"
                 android:text="Water Level (In Liters)"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -412,7 +449,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Water Needed Every Day"
-                android:fontFamily="@font/roboto_variablefont"
+                android:fontFamily="@font/nunito_variablefont_wght"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />

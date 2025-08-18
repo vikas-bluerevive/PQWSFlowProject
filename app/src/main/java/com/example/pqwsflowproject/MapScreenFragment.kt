@@ -1,11 +1,13 @@
 package com.example.pqwsflowproject
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +16,12 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.pqwsflowproject.R.color.teal_700
 import com.example.pqwsflowproject.databinding.MapScreenBinding
 import com.example.pqwsflowproject.model.ContentItem3
+import com.example.pqwsflowproject.model.ContentItem8
+import com.example.pqwsflowproject.model.DeviceLocationResponse
+import com.example.pqwsflowproject.model.DevicesResponse
 import com.example.pqwsflowproject.model.LocationResponse
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.google.android.gms.common.api.ApiException
@@ -60,7 +66,16 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var contentLocation : MutableList<ContentItem3>
 
+    private lateinit var contentDevices : MutableList<ContentItem8>
+
     private var areaArray : ArrayList<String> = ArrayList()
+
+    private var arrayDevices : ArrayList<String> = ArrayList()
+
+    private var latitute :Double =0.0
+    private var logitute :Double = 0.0
+
+    private lateinit var googleMapp: GoogleMap
 
     private lateinit var pref: SharedPreferences
 
@@ -124,6 +139,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
 
         pref = activity?.getSharedPreferences("PrefMode", MODE_PRIVATE)!!
         areaArray.add("Select Area")
+        arrayDevices.add("Select Smart Boxes")
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         mainActivityViewModel.getLocations()
 
@@ -147,11 +163,51 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
 
 
         })
+        binding.spinner2.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                p0: AdapterView<*>?,
+                p1: View?,
+                p2: Int,
+                p3: Long
+            ) {
+                if(p2!=0){
+                   if(contentLocation.isEmpty()==false) {
+
+                       contentLocation.get(p2-1).city?.let { mainActivityViewModel.getDeviceByCity(it) }
+
+
+                   }
+
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+
+        })
+
+        mainActivityViewModel.devicesResponse.observe(viewLifecycleOwner, Observer{
+
+            var devicesResponse : DevicesResponse? = it
+            devicesResponse?.let{
+               arrayDevices.clear()
+                arrayDevices.add("Select Smart Boxes")
+                contentDevices = it.data?.content as MutableList<ContentItem8>
+
+                for(items in contentDevices){
+                    items.deviceId?.let { e -> arrayDevices.add(e) }
+
+
+                }
+
+            }
+        })
 
        /* mainActivityViewModel.jsonString.observe(viewLifecycleOwner, Observer {
            drawPath(it)
         })*/
-
         mainActivityViewModel.result.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 googleMap?.let { it1 -> addPolyline(it, it1) };
@@ -174,7 +230,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
             ArrayAdapter<CharSequence>(
                 it,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                smartBoxCode
+                arrayDevices as List<CharSequence>
             )
         }
         binding.spinner3.adapter = smartBoxCodeAdapter
@@ -182,7 +238,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         binding.spinner3.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if(p2 != 0){
-
+                    mainActivityViewModel.getDeviceLocationAndStatus(arrayDevices.get(p2))
                     binding.mapLinearContainer.visibility = View.VISIBLE
                     binding.view3.visibility = View.VISIBLE
 
@@ -200,13 +256,50 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
 
         })
 
+        mainActivityViewModel.deviceStatusAndResponse.observe(viewLifecycleOwner, Observer{
+            var deviceStatus : DeviceLocationResponse? = it
+            deviceStatus?.let{
+            Log.e("DeviceStatus","device "+deviceStatus)
+                 latitute = it.data?.latitude!!
+                  logitute = it.data?.longitude!!
+
+                var status = it.data?.status
+                if(status.equals("ACTIVE")){
+                binding.textView4.setText(it.data?.status)
+                    binding.view3.setBackgroundColor(getResources().getColor(R.color.teal_700))
+
+                }else{
+
+                    binding.textView4.setText(it.data?.status)
+                    binding.view3.setBackgroundColor(getResources().getColor(R.color.grey))
+
+                }
+
+               googleMapp.clear()
+                googleMapp.addMarker(MarkerOptions().title(it.data?.deviceId)
+                    .position(LatLng(latitute, logitute)))
+                googleMapp.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitute ,logitute), 18F))
+               // googleMapp.addMarker(MarkerOptions().position(LatLng(latitute, logitute)))
+            }
+        })
 
 
-        var geocoder = activity?.let { Geocoder(it, Locale.getDefault()) }
-        var  addresses : MutableList<Address>? = geocoder?.getFromLocation(31.68, 76.52, 1)
 
-        val address: Address? = addresses?.get(0)
-       var result =  address?.getAddressLine(0) + ", " + address?.getLocality()
+     try{
+
+          var geocoder = activity?.let { Geocoder(it, Locale.getDefault()) }
+         var  addresses : MutableList<Address>? = geocoder?.getFromLocation(31.68, 76.52, 1)
+
+         val address: Address? = addresses?.get(0)
+        var result =  address?.getAddressLine(0) + ", " + address?.getLocality()
+
+        } catch (e:IOException) {
+        // TODO Auto-generated catch block
+             e.printStackTrace();
+
+          }
+
+
 
 
 
@@ -218,7 +311,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        this.googleMap = googleMap
+        this.googleMapp = googleMap
       //  googleMap.getUiSettings().setZoomControlsEnabled(true)
       //  googleMap.uiSettings.isScrollGesturesEnabled = true
         setupGoogleMapScreenSettings(googleMap)
@@ -233,12 +326,12 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
             TravelMode.DRIVING)*/
 
 
-        /*googleMap.addMarker(MarkerOptions().position(LatLng(31.68, 76.52)))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(31.68, 76.52), 40F))
-        googleMap.addMarker(MarkerOptions().position(LatLng(31.690783, 76.517715)))
 
 
-        makeURL(31.68,76.52,31.690783,76.517715)?.let { mainActivityViewModel.getJsonFromString(it) }*/
+
+
+
+      //  makeURL(31.68,76.52,31.690783,76.517715)?.let { mainActivityViewModel.getJsonFromString(it) }
        /* var polyline = googleMap.addPolyline(
             PolylineOptions()
                 .add(LatLng(31.68, 76.52), LatLng(31.690783, 76.517715))

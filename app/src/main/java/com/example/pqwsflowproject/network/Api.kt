@@ -1,6 +1,8 @@
 package com.example.pqwsflowproject.network
 
 import com.example.pqwsflowproject.model.CreatedUser
+import com.example.pqwsflowproject.model.DeviceLocationResponse
+import com.example.pqwsflowproject.model.DevicesResponse
 import com.example.pqwsflowproject.model.LocationDetails
 import com.example.pqwsflowproject.model.LocationResponse
 import com.example.pqwsflowproject.model.LoginResponse
@@ -69,5 +71,11 @@ interface Api {
 
     @GET("tank/{page}/{size}/{locationId}")
     suspend fun getTankByLocation( @Path("page")id:Int?,@Path("size")size:Int?,@Path("locationId")locId:Int?):Response<ResponseBody>
+
+    @GET("devices/status-location")
+    suspend fun  getDeviceLocationAndStatus(@Query("deviceId") deviceId: String?) : Response<DeviceLocationResponse>
+
+    @GET("devices/by-city")
+    suspend fun  getDevicesByCity(@Query("city") city: String?,@Query("page") page: Int?,@Query("size") size: Int?) : Response<DevicesResponse>
 
 }
