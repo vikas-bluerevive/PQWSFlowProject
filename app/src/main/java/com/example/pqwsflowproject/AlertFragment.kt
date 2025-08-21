@@ -86,7 +86,7 @@ class AlertFragment : Fragment() {
         var areaCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_dropdown,
                 areaCode
             )
         }

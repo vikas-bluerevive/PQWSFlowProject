@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -78,6 +79,9 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
     private lateinit var googleMapp: GoogleMap
 
     private lateinit var pref: SharedPreferences
+
+    private  var areaCodeAdapter : ArrayAdapter<CharSequence>? = null
+    private  var  smartBoxCodeAdapter: ArrayAdapter<CharSequence>? = null
 
     private val overview = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,6 +162,9 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
                         items.district?.let { areaArray.add(it) }
 
                     }
+                    activity?.runOnUiThread {
+                        areaCodeAdapter?.notifyDataSetChanged()
+                    }
                 }
             }
 
@@ -202,6 +209,10 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
 
                 }
 
+                activity?.runOnUiThread {
+                    smartBoxCodeAdapter?.notifyDataSetChanged()
+                }
+
             }
         })
 
@@ -216,20 +227,20 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
             }
         })
         val areaCode = arrayOf("Select Area", "Area 1", "Area2")
-        var areaCodeAdapter = activity?.let {
+        areaCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
-                androidx.appcompat. R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_dropdown,
                 areaArray as List<CharSequence>
             )
         }
         binding.spinner2.adapter = areaCodeAdapter
         val smartBoxCode = arrayOf("Select Smart Box", "SmartBox1", "SmartBox2")
 
-        var smartBoxCodeAdapter = activity?.let {
+         smartBoxCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_dropdown,
                 arrayDevices as List<CharSequence>
             )
         }
@@ -266,12 +277,21 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
                 var status = it.data?.status
                 if(status.equals("ACTIVE")){
                 binding.textView4.setText(it.data?.status)
-                    binding.view3.setBackgroundColor(getResources().getColor(R.color.teal_700))
+                   /* binding.textView4.setTextColor(android.graphics.Color.parseColor("#000000"))
+                            binding.textView6.setTextColor(android.graphics.Color.parseColor("#000000"))
+                            binding.textView7.setTextColor(android.graphics.Color.parseColor("#000000"))*/
+
+
+                    binding.viewContraint.setBackgroundColor(getResources().getColor(R.color.green))
 
                 }else{
 
                     binding.textView4.setText(it.data?.status)
-                    binding.view3.setBackgroundColor(getResources().getColor(R.color.grey))
+                    binding.textView4.setTextColor(getResources().getColor(R.color.black))
+                    binding.textView4.setTextColor(getResources().getColor(R.color.black))
+                    binding.textView4.setTextColor(getResources().getColor(R.color.black))
+
+                    binding.viewContraint.setBackgroundColor(getResources().getColor(R.color.grey2))
 
                 }
 

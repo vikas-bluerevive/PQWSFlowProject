@@ -1,7 +1,6 @@
 package com.example.pqwsflowproject
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
@@ -11,16 +10,19 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pqwsflowproject.adapter.TankAdapter
 import com.example.pqwsflowproject.adapter.TimeSlotAndWaterLevelAdapter
 import com.example.pqwsflowproject.databinding.ActivityTankScheduleBinding
+import com.example.pqwsflowproject.model.FlowValues
+import com.example.pqwsflowproject.model.HoursItem2
 import com.example.pqwsflowproject.model.ScheduleSucessResponse
+import com.example.pqwsflowproject.model.WaterSummaryResponse
 import com.example.pqwsflowproject.utils.CommonFunction
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.github.mikephil.charting.charts.LineChart
@@ -32,9 +34,11 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-
-class TankScheduleActivity : FragmentActivity() {
+class TankScheduleActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener,
+TimePickerDialog.OnTimeSetListener{
 
     private lateinit var binding: ActivityTankScheduleBinding
     private var  date_time :String = ""
@@ -44,6 +48,9 @@ class TankScheduleActivity : FragmentActivity() {
     private lateinit var mainActivityViewModel: MainActivityViewModel
 
     private lateinit var pref: SharedPreferences
+
+    private lateinit var  hourFlowList : MutableList<HoursItem2>
+    private var hoursFlowItems : ArrayList<FlowValues> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val prefs =
@@ -62,19 +69,24 @@ class TankScheduleActivity : FragmentActivity() {
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
         pref = getSharedPreferences("PrefMode", MODE_PRIVATE)
+        val tankName= intent.getExtras()?.getString("TankName")
+
+        binding.tankText?.setText(tankName)
+
+
 
 
         val instantWaterCode = arrayOf("Instant Water Supply", "true", "false")
         var instantWaterCodeAdapter =
             ArrayAdapter<CharSequence>(
                 this,
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_dropdown,
                 instantWaterCode
             )
 
-        binding.spinner2.adapter = instantWaterCodeAdapter
+        binding.spinner2?.adapter = instantWaterCodeAdapter
 
-        binding.spinner2.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+        binding.spinner2?.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 p0: AdapterView<*>?,
                 p1: View?,
@@ -99,6 +111,26 @@ class TankScheduleActivity : FragmentActivity() {
             }
 
         })
+        if(binding.switch1?.isChecked == true){
+            binding.editTimeSchedule.isEnabled = false
+            binding.relativeLayout2.visibility =  View.GONE
+        }else{
+            binding.editTimeSchedule.isEnabled = true
+            binding.relativeLayout2.visibility = View.VISIBLE
+        }
+
+        binding.switch1?.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(p0: CompoundButton?, isChecked: Boolean) {
+              if(isChecked){
+
+                  binding.editTimeSchedule.isEnabled = false
+                  binding.relativeLayout2.visibility =  View.GONE
+              }else{
+                  binding.editTimeSchedule.isEnabled = true
+                  binding.relativeLayout2.visibility = View.VISIBLE
+              }
+            }
+        });
 
         mainActivityViewModel.progressBar.observe(this, Observer<Boolean> {
             if (it) {
@@ -168,15 +200,15 @@ class TankScheduleActivity : FragmentActivity() {
 
 
         binding.materialButton3.setOnClickListener {
-            var spinnerInstantSelection = binding.spinner2.selectedItemPosition
+            var spinnerInstantSelection = binding.spinner2?.selectedItemPosition
 
             Log.e("InstantCheck","Instant checks are "+binding.editTimeSchedule.text.toString().equals("") + "  "+spinnerInstantSelection)
             if(!binding.editTimeSchedule.text.toString().equals(" ")){
 
-                if(spinnerInstantSelection == 2){
+                if(binding.switch1?.isChecked == true){
 
                   mainActivityViewModel.createScedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0),binding.editTimeSchedule.text.toString())
-                }else if(spinnerInstantSelection == 1){
+                }else if(binding.switch1?.isChecked == false){
                     mainActivityViewModel.createInstantSchedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0))
 
                 }
@@ -187,8 +219,47 @@ class TankScheduleActivity : FragmentActivity() {
 
         }
 
+        mainActivityViewModel.waterSummaryRes.observe(this,Observer{
+            var waterSummaryRes : WaterSummaryResponse? = it
+            waterSummaryRes?.let{
+                hourFlowList = it.data?.hours as MutableList<HoursItem2>
 
-        var waterLevelAndTimeSlotAdapter = TimeSlotAndWaterLevelAdapter()
+                for((index, values) in hourFlowList.withIndex()){
+                    var timeslot =""
+                     if(index < 10){
+                        timeslot = "" + (index+1) + " Am" + " - " + (index + 2) + " Am"
+                    }else if(index == 10){
+                        timeslot = "" + (index+1)  + " Am" + " - " + (index + 2)  + " Pm"
+
+                    }else if(index == 11){
+                         timeslot = "" + (index+1)  + " Pm" + " - " + 1  + " Pm"
+                    } else if(index > 11 && index < 22){
+                        timeslot = "" + ( (index + 1) -12) + " Pm" + " - " +( (index + 2) - 12) + " Pm"
+                    }else if(index == 22){
+
+                         timeslot = "" + ((index + 1) -12)  + " Pm" + " - " +( (index + 2) - 12)  + " Am"
+                    } else if(index == 23){
+
+                        timeslot = "" + 12 + " Am" + " - " +  1 + " Am"
+                    }
+
+                   var flowValues = FlowValues(timeslot, values.waterVolumeLitres as Double?)
+                    hoursFlowItems.add(flowValues)
+                }
+                //var flowValue = FlowValues()
+
+               Log.e("WaterSummaryRes","water summary res is "+waterSummaryRes)
+                var waterLevelAndTimeSlotAdapter = TimeSlotAndWaterLevelAdapter(hoursFlowItems)
+                binding.recyclerTimeAndlevelListing?.let {
+                    it.layoutManager = LinearLayoutManager(this,
+                        LinearLayoutManager.VERTICAL,false)
+                }
+                binding.recyclerTimeAndlevelListing?.let { it.adapter = waterLevelAndTimeSlotAdapter }
+            }
+        })
+
+
+        var waterLevelAndTimeSlotAdapter = TimeSlotAndWaterLevelAdapter(hoursFlowItems)
         binding.recyclerTimeAndlevelListing?.let {
             it.layoutManager = LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL,false)
@@ -200,10 +271,14 @@ class TankScheduleActivity : FragmentActivity() {
         var mMonth = c.get(Calendar.MONTH)
         var mDay = c.get(Calendar.DAY_OF_MONTH)
 
-        binding.dateText?.setText(""+mDay+"-"+"0"+(mMonth+1)+"-"+mYear)
+        var date  = ""+mDay+"-"+"0"+(mMonth+1)+"-"+mYear
+        var date1 =  ""+mYear+"-"+"0"+(mMonth+1)+"-"+mDay
+        binding.dateText?.setText(date1)
+        mainActivityViewModel.getWaterSummary(pref.getInt("supplyId",0),date1)
         binding.imageView12?.setOnClickListener {
 
             datePickerCalender(mYear,mMonth,mDay)
+
         }
 
         val lineChart = binding.lineChart
@@ -219,15 +294,19 @@ class TankScheduleActivity : FragmentActivity() {
 
     private fun datePickerCalender(mYear: Int, mMonth: Int, mDay: Int) {
 
-        var datePickerDialog2 = DatePickerDialog(this,
-            { view, year, monthOfYear, dayOfMonth ->
-                date_time = dayOfMonth.toString() + "-"+"0" + (monthOfYear + 1) + "-" + year
+     //   var datePickerDialog2 = DatePickerDialog(this,
+     //       { view, year, monthOfYear, dayOfMonth ->
+     //           date_time = dayOfMonth.toString() + "-"+"0" + (monthOfYear + 1) + "-" + year
+
                 //*************Call Time Picker Here ********************
-                binding.dateText?.setText(date_time)
-            }, mYear, mMonth, mDay
-        )
-        datePickerDialog2.show()
-        datePickerDialog2.getDatePicker().setMaxDate(System.currentTimeMillis());
+    ///            binding.dateText?.setText(date_time)
+    //            var date =""+year+"-"+"0"+(monthOfYear + 1)+"-"+dayOfMonth.toString()
+    ///             mainActivityViewModel.getWaterSummary(pref.getInt("supplyId",0),date)
+
+    //        }, mYear, mMonth, mDay
+   //     )
+   //     datePickerDialog2.show()
+   //     datePickerDialog2.getDatePicker().setMaxDate(System.currentTimeMillis());
 
     }
 
@@ -239,42 +318,111 @@ class TankScheduleActivity : FragmentActivity() {
         var mYear = c.get(Calendar.YEAR)
         var mMonth = c.get(Calendar.MONTH)
         var mDay = c.get(Calendar.DAY_OF_MONTH)
-         datePickerDialog = DatePickerDialog(this,
-            { view, year, monthOfYear, dayOfMonth ->
-                date_time = dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year
+        var datpickerListener = object : DatePickerDialog.OnDateSetListener{
+            override fun onDateSet(
+                view: DatePickerDialog?,
+                year: Int,
+                monthOfYear: Int,
+                dayOfMonth: Int
+            ) {
+                timePicker(year, monthOfYear,dayOfMonth)
+            }
+        }
+
+        datePickerDialog =   DatePickerDialog.newInstance(datpickerListener, mYear, mMonth, mDay);
+        datePickerDialog.setThemeDark(false);
+        datePickerDialog.showYearPickerFirst(false);
+        datePickerDialog.setTitle("Date Picker");
+        datePickerDialog.show(getFragmentManager(), "DatePickerDialog")
+
+
+        datePickerDialog.setOnDateSetListener(datpickerListener)
+
+      datePickerDialog.setMinDate(c);
+
+
+
+
+
+
+
+
+
+
+       //  datePickerDialog = DatePickerDialog(this,
+       //     { view, year, monthOfYear, dayOfMonth ->
+       //         date_time = dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year
                 //*************Call Time Picker Here ********************
-                timePicker()
-            }, mYear, mMonth, mDay
-        )
-        datePickerDialog.show()
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+      //          timePicker()
+     //       }, mYear, mMonth, mDay
+     //   )
+     //   datePickerDialog.show()
+     //   datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+
+
+
+
     }
-    private fun timePicker() {
+    private fun timePicker(mYear: Int,mMonth: Int, mDay: Int) {
         // Get Current Time
         val c = Calendar.getInstance()
         var mHour = c[Calendar.HOUR_OF_DAY]
         var mMinute = c[Calendar.MINUTE]
 
-        // Launch Time Picker Dialog
-        timePickerDialog = TimePickerDialog(this,
-            { view, hourOfDay, minute ->
-                mHour = hourOfDay
-                mMinute = minute
+        var timepickerListener = object: TimePickerDialog.OnTimeSetListener{
+            override fun onTimeSet(
+                view: TimePickerDialog?,
+                hourOfDay: Int,
+                minute: Int,
+                second: Int
+            ) {
                 val calendar = Calendar.getInstance()
-                calendar.set(datePickerDialog.datePicker.getYear(), datePickerDialog.datePicker.getMonth(), datePickerDialog.datePicker.getDayOfMonth(), mHour,mMinute)
+                calendar.set(mYear, mMonth, mDay,  hourOfDay,minute)
 
                 val gmtFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                 /* val gmtTime: TimeZone = TimeZone.getTimeZone("GMT")
                  gmtFormat.setTimeZone(gmtTime)*/
                 val mydate = "" + gmtFormat.format(calendar.time)
-               // binding.editTimeSchedule.setText(date_time + " " + hourOfDay + ":" + minute)
+                // binding.editTimeSchedule.setText(date_time + " " + hourOfDay + ":" + minute)
                 binding.editTimeSchedule.setText(mydate)
+            }
+        }
 
-                Log.e("DateTime","date time set is "+mydate)
+        // Launch Time Picker Dialog
+
+         timePickerDialog = TimePickerDialog.newInstance(timepickerListener , mHour, mMinute,false );
+                timePickerDialog.setThemeDark(false);
+                //timePickerDialog.showYearPickerFirst(false);
+                timePickerDialog.setTitle("Time Picker");
+
+
+
+                timePickerDialog.show(getFragmentManager(), "TimePickerDialog");
+
+
+
+        timePickerDialog.setOnTimeSetListener(timepickerListener )
+
+        // Launch Time Picker Dialog
+      //  timePickerDialog = TimePickerDialog(this,
+      //      { view, hourOfDay, minute ->
+     //           mHour = hourOfDay
+     //           mMinute = minute
+     //           val calendar = Calendar.getInstance()
+     //           calendar.set(datePickerDialog.datePicker.getYear(), datePickerDialog.datePicker.getMonth(), datePickerDialog.datePicker.getDayOfMonth(), mHour,mMinute)
+
+      //          val gmtFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                /* val gmtTime: TimeZone = TimeZone.getTimeZone("GMT")
+                 gmtFormat.setTimeZone(gmtTime)*/
+      //          val mydate = "" + gmtFormat.format(calendar.time)
+               // binding.editTimeSchedule.setText(date_time + " " + hourOfDay + ":" + minute)
+      //          binding.editTimeSchedule.setText(mydate)
+
+     //           Log.e("DateTime","date time set is "+mydate)
                 //et_show_date_time.setText()
-            }, mHour, mMinute, false
-        )
-        timePickerDialog.show()
+    //        }, mHour, mMinute, false
+    //    )
+     //   timePickerDialog.show()
 
 
 
@@ -346,6 +494,24 @@ class TankScheduleActivity : FragmentActivity() {
 
         chart.data = LineData(dataSet)
         chart.invalidate() // Refresh the chart
+    }
+
+    override fun onDateSet(
+        view: DatePickerDialog?,
+        year: Int,
+        monthOfYear: Int,
+        dayOfMonth: Int
+    ) {
+
+    }
+
+    override fun onTimeSet(
+        view: TimePickerDialog?,
+        hourOfDay: Int,
+        minute: Int,
+        second: Int
+    ) {
+
     }
 
 }

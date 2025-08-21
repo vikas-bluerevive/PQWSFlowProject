@@ -52,6 +52,7 @@ class TankAdapter(var tankArrayList: ArrayList<TanKData>, var pref: SharedPrefer
            // tileClick?.tileClick(true)
             tankArrayList.get(position).supplyId?.let { p1 -> pref.edit().putInt("supplyId",p1) }?.commit()
             val intent =     Intent(holder.layout.context, TankScheduleActivity::class.java)
+            intent.putExtra("TankName",tankArrayList.get(position).tank)
 
             ContextCompat.startActivity(holder.layout.context, intent, null)
         }

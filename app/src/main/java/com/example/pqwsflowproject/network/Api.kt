@@ -15,6 +15,7 @@ import com.example.pqwsflowproject.model.SourceTankResponse
 import com.example.pqwsflowproject.model.SummaryResponse
 import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.User
+import com.example.pqwsflowproject.model.WaterSummaryResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -65,7 +66,7 @@ interface Api {
     suspend fun getSourceTank(@Query("page") page: Int?,@Query("size") size: Int?,@Query("locationId") locId :Int?):Response<SourceTankResponse>
 
     @GET("flow/{deviceId}/summary")
-    suspend fun getSummary(@Path("deviceId")deviceId :Int,@Query("date") date :Int) : Response<SummaryResponse>
+    suspend fun getWaterSummary(@Path("deviceId")deviceId :Int,@Query("date") date :String) : Response<WaterSummaryResponse>
     @GET("tank/supply")
     suspend fun getSupplyTank(@Query("page") page: Int?,@Query("size") size: Int?,@Query("sourceTankId") sourceTankId :Int?):Response<SupplyTankResponse>
 

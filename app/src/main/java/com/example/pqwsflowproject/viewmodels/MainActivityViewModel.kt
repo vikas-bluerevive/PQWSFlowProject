@@ -14,6 +14,7 @@ import com.example.pqwsflowproject.model.SchedulesResponse
 import com.example.pqwsflowproject.model.SourceTankResponse
 import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.User
+import com.example.pqwsflowproject.model.WaterSummaryResponse
 import com.example.pqwsflowproject.network.Api
 import com.example.pqwsflowproject.network.Repository
 import com.example.pqwsflowproject.utils.JsonParsor
@@ -49,6 +50,7 @@ class MainActivityViewModel : BaseViewModel(){
 
        var devicesResponse : MutableLiveData<DevicesResponse> = MutableLiveData()
        var deviceStatusAndResponse : MutableLiveData<DeviceLocationResponse> = MutableLiveData()
+        var waterSummaryRes : MutableLiveData<WaterSummaryResponse>   = MutableLiveData()
 
        var api : Api
        init {
@@ -249,6 +251,32 @@ class MainActivityViewModel : BaseViewModel(){
                      feedBackMessage.value = e.message!!
 
               }
+
+       }
+       fun getWaterSummary(deviceId:Int,date:String){
+
+              try {
+                     viewModelScope.launch(Dispatchers.IO) {
+                            var res =api.getWaterSummary(deviceId,date)
+                            waterSummaryRes.postValue(res.body())
+
+                            // sourceTankRes.postValue(res)
+                     }
+
+                     /*val response =
+                         respository.socialLogin(name, email, image, phone, instagramId, googleId, fbId)*/
+              } catch (e: com.example.pqwsflowproject.utils.ApiException) {
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              } catch (e: NoInternetException) {
+
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
+
+              }
+
+
 
        }
 

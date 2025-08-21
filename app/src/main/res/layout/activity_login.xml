@@ -36,7 +36,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="79dp"
+        android:layout_marginEnd="75dp"
 
         android:fontFamily="@font/nunito_variablefont_wght"
         android:text="Every Drop Matters !"
@@ -53,7 +53,7 @@
         android:layout_marginStart="130dp"
         android:layout_marginTop="70dp"
         android:text="Login to your account"
-        android:fontFamily="@font/nunito_variablefont_wght"
+        android:fontFamily="@font/roboto_variablefont"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,7 +94,7 @@
             android:focusable="true"
             android:hint="email@email.com"
             android:inputType="textEmailAddress"
-
+            android:fontFamily="@font/nunito_variablefont_wght"
             android:textColor="@color/white"></EditText>
 
     </RelativeLayout>
@@ -124,6 +124,7 @@
             android:hint="password"
             android:inputType="textPassword"
             android:maxLength="11"
+            android:fontFamily="@font/nunito_variablefont_wght"
             android:textColor="@color/white"></EditText>
 
     </RelativeLayout>
@@ -177,8 +178,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="40dp"
         android:text="Terms of Service"
-        android:textStyle="bold"
-        android:fontFamily="@font/nunito_variablefont_wght"
+        android:fontFamily="@font/roboto_variablefont"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/materialButton4"></TextView>
 
@@ -197,8 +197,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="Privacy Policy"
-        android:fontFamily="@font/nunito_variablefont_wght"
-        android:textStyle="bold"
+        android:fontFamily="@font/roboto_variablefont"
+
         app:layout_constraintStart_toEndOf="@+id/textView38"
         app:layout_constraintTop_toBottomOf="@+id/textView5">
 

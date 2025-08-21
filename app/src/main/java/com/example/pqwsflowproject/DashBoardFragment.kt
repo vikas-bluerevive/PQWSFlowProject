@@ -111,15 +111,20 @@ class DashBoardFragment : Fragment() {
                 areaArray.clear()
                 areaArray.add("Select Area")
                 if(contentLocation.isEmpty()== false){
-
-                    for(items in contentLocation){
-                        items.district?.let { areaArray.add(it) }
+                 var locId=   pref.getInt("locId",0)
+                    var position = 0
+                    for((index,values) in contentLocation.withIndex()){
+                         if(values.id == locId){
+                             position= index
+                         }
+                        values.district?.let { areaArray.add(it) }
 
                     }
                     activity?.runOnUiThread {
 
                         areaCodeAdapter?.notifyDataSetChanged()
                     }
+                    binding.spinner2.setSelection(position+1)
 
                 }
 
@@ -135,9 +140,14 @@ class DashBoardFragment : Fragment() {
                 sourceTankArray.clear()
                 sourceTankArray.add("Select Source Tank")
                 if(contentSourceTank.isEmpty()== false){
+                    var sourceID=   pref.getInt("sourceId",0)
+                    var position = 0
+                    for((index,values) in contentSourceTank.withIndex()){
 
-                    for(items in contentSourceTank){
-                        items.name?.let { it1 -> sourceTankArray.add(it1) }
+                        if(values.id == sourceID){
+                            position = index
+                        }
+                        values.name?.let { it1 -> sourceTankArray.add(it1) }
 
 
                     }
@@ -146,6 +156,7 @@ class DashBoardFragment : Fragment() {
 
                         sourceTankCodeAdapter?.notifyDataSetChanged()
                     }
+                    binding.spinner3.setSelection(position+1)
                 }
 
             }
@@ -165,8 +176,11 @@ class DashBoardFragment : Fragment() {
            supplyTankArray.add("Select Supply Tank")
            if(contentSupplyTank.isEmpty()== false){
                tankArrayList.clear()
+               var supplyID=   pref.getInt("supplyId",0)
+               var position = 0
               for((index, value) in contentSupplyTank.withIndex())
                {
+
                    var tankItem : TanKData
                   if(index % 2 == 0){
                        tankItem = TanKData(
@@ -188,6 +202,9 @@ class DashBoardFragment : Fragment() {
                   tankArrayList.add(tankItem)
 
                    value.name?.let { it1 ->  supplyTankArray.add(it1) }
+                   if(value.id == supplyID){
+                       position = index
+                   }
 
 
                }
@@ -195,6 +212,7 @@ class DashBoardFragment : Fragment() {
 
                    supplyTankCodeAdapter?.notifyDataSetChanged()
                }
+               binding.spinner4.setSelection(position+1)
            }
           var tankAdapter = TankAdapter(tankArrayList,pref)
            binding.recyclerTankersListing.layoutManager = LinearLayoutManager(activity,
@@ -215,7 +233,7 @@ class DashBoardFragment : Fragment() {
         areaCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_dropdown,
                 areaArray as List<CharSequence>
             )
         }
@@ -226,7 +244,9 @@ class DashBoardFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                if(p2!=0){
+
                    contentLocation.get(p2 -1).id?.let { mainActivityViewModel.getSourceTank(it) }
+                   contentLocation.get(p2 -1).id?.let { pref.edit().putInt("locId",it) }?.commit()
                }
 
             }
@@ -240,7 +260,7 @@ class DashBoardFragment : Fragment() {
         sourceTankCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_dropdown,
                 sourceTankArray as List<CharSequence>
             )
         }
@@ -278,7 +298,7 @@ class DashBoardFragment : Fragment() {
          supplyTankCodeAdapter = activity?.let {
             ArrayAdapter<CharSequence>(
                 it,
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_dropdown,
                 supplyTankArray as List<CharSequence>
             )
         }
@@ -339,6 +359,10 @@ class DashBoardFragment : Fragment() {
         binding.materialButton3.setOnClickListener {
 
             val intent =     Intent( binding.materialButton3.context, TankScheduleActivity::class.java)
+            if (::contentSupplyTank.isInitialized){
+                var supplyTankPos = binding.spinner4.selectedItemPosition
+                intent.putExtra("TankName",contentSupplyTank.get(supplyTankPos -1).name)
+            }
 
             ContextCompat.startActivity( binding.materialButton3.context, intent, null)
         }

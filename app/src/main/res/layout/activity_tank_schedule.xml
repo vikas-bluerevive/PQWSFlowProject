@@ -36,6 +36,7 @@
 
 
     <TextView
+        android:id="@+id/tankText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
@@ -63,19 +64,31 @@
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_weight=".28"
-        android:background="@drawable/border_grey"
-
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2">
-
-        <Spinner
+       <TextView
+           android:text="Instant Water Supply"
+           android:layout_width="wrap_content"
+           android:fontFamily="@font/nunito_variablefont_wght"
+           android:layout_height="wrap_content"></TextView>
+        <Switch
+            android:layout_alignParentEnd="true"
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:thumb="@drawable/customthumb"
+            android:track="@drawable/customtrack"
+           ></Switch>
+        <!--<Spinner
+           android:background="@drawable/border_grey"
             android:id="@+id/spinner2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +97,7 @@
             android:gravity="center"
             android:spinnerMode="dropdown"
             tools:layout_editor_absoluteX="113dp"
-            tools:layout_editor_absoluteY="104dp" />
+            tools:layout_editor_absoluteY="104dp" />-->
     </RelativeLayout>
 
     <RelativeLayout
@@ -110,6 +123,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:focusable="true"
+            android:fontFamily="@font/nunito_variablefont_wght"
             android:text="Time Schedule Water Supply"
             android:textSize="15sp"
             android:inputType="text"
@@ -147,8 +161,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/nunito_variablefont_wght"
             android:layout_marginStart="10dp"
-            android:text="Water Contains in Liters"></TextView>
+            android:text="Water Required (In Liters)"></TextView>
 
         <com.google.android.material.slider.Slider
             android:layout_weight="1"
@@ -203,14 +218,80 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contraint11"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialButton3">
+
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="6dp"
+            android:text="Valve Status"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></TextView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/view01"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="36dp"
+            android:elevation="12dp"
+            app:cardCornerRadius="40dp"
+            app:layout_constraintStart_toEndOf="@+id/textView46"
+            app:layout_constraintTop_toTopOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/green">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="ON"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></TextView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <Switch
+            android:id="@+id/switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="25dp"
+            android:checked="true"
+            android:thumb="@drawable/customthumb"
+            android:track="@drawable/customtrack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></Switch>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="170dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton3">
+        app:layout_constraintTop_toBottomOf="@+id/contraint11">
         <androidx.cardview.widget.CardView
             android:id="@+id/view3"
             android:layout_width="180dp"
@@ -226,7 +307,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey">
+                android:background="@color/grey2">
 
                 <TextView
                     android:id="@+id/textView4"
@@ -235,7 +316,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="29dp"
                     android:text="Water Contain"
-                    android:fontFamily="@font/roboto_variablefont"
+                    android:fontFamily="@font/nunito_variablefont_wght"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -250,7 +331,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="8dp"
                     android:text="2000 L"
-                    android:fontFamily="@font/roboto_variablefont"
+                    android:fontFamily="@font/nunito_variablefont_wght"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -264,7 +345,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="9dp"
                     android:text="+20% month over month"
-                    android:fontFamily="@font/roboto_variablefont"
+                    android:fontFamily="@font/nunito_variablefont_wght"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView6">
@@ -292,7 +373,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey">
+                android:background="@color/grey2">
 
                 <TextView
                     android:id="@+id/textView7"
@@ -301,7 +382,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="32dp"
                     android:text=" Water Required"
-                    android:fontFamily="@font/roboto_variablefont"
+                    android:fontFamily="@font/nunito_variablefont_wght"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -314,7 +395,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="9dp"
                     android:text="1000L"
-                    android:fontFamily="@font/roboto_variablefont"
+                    android:fontFamily="@font/nunito_variablefont_wght"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -328,7 +409,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:text="+30% month over month"
-                    android:fontFamily="@font/roboto_variablefont"
+                    android:fontFamily="@font/nunito_variablefont_wght"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView8">
@@ -386,7 +467,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
-            android:background="@color/grey"
+            android:background="@color/grey2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -398,7 +479,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
                 android:text="Time Slot"
-                android:fontFamily="@font/roboto_variablefont"
+                android:fontFamily="@font/nunito_variablefont_wght"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -407,7 +488,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="10dp"
-                android:fontFamily="@font/roboto_variablefont"
+                android:fontFamily="@font/nunito_variablefont_wght"
                 android:text="Water Level (In Liters)"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></TextView>
