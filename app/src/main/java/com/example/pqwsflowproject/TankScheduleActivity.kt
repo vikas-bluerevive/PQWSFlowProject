@@ -77,7 +77,7 @@ TimePickerDialog.OnTimeSetListener{
 
 
         val instantWaterCode = arrayOf("Instant Water Supply", "true", "false")
-        var instantWaterCodeAdapter =
+        val instantWaterCodeAdapter =
             ArrayAdapter<CharSequence>(
                 this,
                 R.layout.spinner_dropdown,
@@ -111,7 +111,7 @@ TimePickerDialog.OnTimeSetListener{
             }
 
         })
-        if(binding.switch1?.isChecked == true){
+      /*  if(binding.switch1?.isChecked == true){
             binding.editTimeSchedule.isEnabled = false
             binding.relativeLayout2.visibility =  View.GONE
         }else{
@@ -130,8 +130,8 @@ TimePickerDialog.OnTimeSetListener{
                   binding.relativeLayout2.visibility = View.VISIBLE
               }
             }
-        });
-
+        })
+*/
         mainActivityViewModel.progressBar.observe(this, Observer<Boolean> {
             if (it) {
                 CommonFunction.showProgressBar(this,"Loading..")
@@ -165,7 +165,7 @@ TimePickerDialog.OnTimeSetListener{
         })*/
 
         mainActivityViewModel.createSchedule.observe(this,Observer{
-            var scheduleSucessResponse : ScheduleSucessResponse? = it
+            val scheduleSucessResponse : ScheduleSucessResponse? = it
             scheduleSucessResponse?.let{
 
                 Toast.makeText(this,it.data , Toast.LENGTH_LONG).show()
@@ -173,7 +173,7 @@ TimePickerDialog.OnTimeSetListener{
         })
 
         mainActivityViewModel.createInstantSchedule.observe(this, Observer{
-            var scheduleSucessResponse  : ScheduleSucessResponse? = it
+            val scheduleSucessResponse  : ScheduleSucessResponse? = it
             scheduleSucessResponse?.let{
                 Toast.makeText(this,it.data , Toast.LENGTH_LONG).show()
             }
@@ -183,12 +183,12 @@ TimePickerDialog.OnTimeSetListener{
         binding.editTimeSchedule.setOnClickListener {
             datePicker()
         }
-        binding.editTimeSchedule.setFocusable(false);
+        binding.editTimeSchedule.setFocusable(false)
 
 
         val waterToBeFilledCode = arrayOf("Select Water to be filled", "water1", "water2","water3")
 
-        var waterToBeFilledCodeAdapter =
+        val waterToBeFilledCodeAdapter =
             ArrayAdapter<CharSequence>(
                 this,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
@@ -200,15 +200,16 @@ TimePickerDialog.OnTimeSetListener{
 
 
         binding.materialButton3.setOnClickListener {
-            var spinnerInstantSelection = binding.spinner2?.selectedItemPosition
+            val spinnerInstantSelection = binding.spinner2?.selectedItemPosition
 
             Log.e("InstantCheck","Instant checks are "+binding.editTimeSchedule.text.toString().equals("") + "  "+spinnerInstantSelection)
             if(!binding.editTimeSchedule.text.toString().equals(" ")){
 
-                if(binding.switch1?.isChecked == true){
-
+              //  if(binding.switch1?.isChecked == true){
+                    if(spinnerInstantSelection ==1){
                   mainActivityViewModel.createScedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0),binding.editTimeSchedule.text.toString())
-                }else if(binding.switch1?.isChecked == false){
+                }else if(spinnerInstantSelection == 2){
+                   // else if(binding.switch1?.isChecked == false){
                     mainActivityViewModel.createInstantSchedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0))
 
                 }
@@ -220,7 +221,7 @@ TimePickerDialog.OnTimeSetListener{
         }
 
         mainActivityViewModel.waterSummaryRes.observe(this,Observer{
-            var waterSummaryRes : WaterSummaryResponse? = it
+            val waterSummaryRes : WaterSummaryResponse? = it
             waterSummaryRes?.let{
                 hourFlowList = it.data?.hours as MutableList<HoursItem2>
 
@@ -243,13 +244,13 @@ TimePickerDialog.OnTimeSetListener{
                         timeslot = "" + 12 + " Am" + " - " +  1 + " Am"
                     }
 
-                   var flowValues = FlowValues(timeslot, values.waterVolumeLitres as Double?)
+                   val flowValues = FlowValues(timeslot, values.waterVolumeLitres as Double?)
                     hoursFlowItems.add(flowValues)
                 }
                 //var flowValue = FlowValues()
 
                Log.e("WaterSummaryRes","water summary res is "+waterSummaryRes)
-                var waterLevelAndTimeSlotAdapter = TimeSlotAndWaterLevelAdapter(hoursFlowItems)
+                val waterLevelAndTimeSlotAdapter = TimeSlotAndWaterLevelAdapter(hoursFlowItems)
                 binding.recyclerTimeAndlevelListing?.let {
                     it.layoutManager = LinearLayoutManager(this,
                         LinearLayoutManager.VERTICAL,false)
@@ -259,7 +260,7 @@ TimePickerDialog.OnTimeSetListener{
         })
 
 
-        var waterLevelAndTimeSlotAdapter = TimeSlotAndWaterLevelAdapter(hoursFlowItems)
+        val waterLevelAndTimeSlotAdapter = TimeSlotAndWaterLevelAdapter(hoursFlowItems)
         binding.recyclerTimeAndlevelListing?.let {
             it.layoutManager = LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL,false)
@@ -267,12 +268,12 @@ TimePickerDialog.OnTimeSetListener{
         binding.recyclerTimeAndlevelListing?.let { it.adapter = waterLevelAndTimeSlotAdapter }
 
         val c: Calendar = Calendar.getInstance()
-        var mYear = c.get(Calendar.YEAR)
-        var mMonth = c.get(Calendar.MONTH)
-        var mDay = c.get(Calendar.DAY_OF_MONTH)
+        val mYear = c.get(Calendar.YEAR)
+        val mMonth = c.get(Calendar.MONTH)
+        val mDay = c.get(Calendar.DAY_OF_MONTH)
 
-        var date  = ""+mDay+"-"+"0"+(mMonth+1)+"-"+mYear
-        var date1 =  ""+mYear+"-"+"0"+(mMonth+1)+"-"+mDay
+        val date  = ""+mDay+"-"+"0"+(mMonth+1)+"-"+mYear
+        val date1 =  ""+mYear+"-"+"0"+(mMonth+1)+"-"+mDay
         binding.dateText?.setText(date1)
         mainActivityViewModel.getWaterSummary(pref.getInt("supplyId",0),date1)
         binding.imageView12?.setOnClickListener {

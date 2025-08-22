@@ -68,7 +68,7 @@ class MainActivityViewModel : BaseViewModel(){
        fun getLocations(){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                           var res : LocationResponse?  =api.getLocation(0,10).body()
+                           val res : LocationResponse?  =api.getLocation(0,10).body()
                             res?.let{
                                    locationRes.postValue(it)
                             }
@@ -94,7 +94,7 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res : SourceTankResponse? =api.getSourceTank(0,10,locationId).body()
+                            val res : SourceTankResponse? =api.getSourceTank(0,10,locationId).body()
                             res?.let{
                                    sourceTankRes.postValue(it)
                             }
@@ -119,7 +119,7 @@ class MainActivityViewModel : BaseViewModel(){
        fun getSupplyTank(sourceTankId:Int){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.getSupplyTank(0,10,sourceTankId).body()
+                            val res =api.getSupplyTank(0,10,sourceTankId).body()
                             supplyTankRes.postValue(res)
                      }
 
@@ -141,12 +141,12 @@ class MainActivityViewModel : BaseViewModel(){
 
        fun createScedule(sourceId :Int , supplyId:Int,scheduleTime:String){
 
-              var schedule = Schedule(sourceId,supplyId,scheduleTime)
+              val schedule = Schedule(sourceId,supplyId,scheduleTime)
 
               progressBar.value= true
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.createSchedule(schedule)
+                            val res =api.createSchedule(schedule)
                             createSchedule.postValue(res.body())
                             //supplyTankRes.postValue(res)
                             viewModelScope.launch(Dispatchers.Main){
@@ -179,7 +179,7 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.createInstantSchedule(body)
+                            val res =api.createInstantSchedule(body)
                             //supplyTankRes.postValue(res)
                             createInstantSchedule.postValue(res.body())
 
@@ -208,7 +208,7 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.getAllSchedules(sourceId,supplyId)
+                            val res =api.getAllSchedules(sourceId,supplyId)
                             schedulesResponse.postValue(res.body())
 
                            // sourceTankRes.postValue(res)
@@ -233,7 +233,7 @@ class MainActivityViewModel : BaseViewModel(){
        fun getDeviceByCity(city:String){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.getDevicesByCity(city,0,20)
+                            val res =api.getDevicesByCity(city,0,20)
                             devicesResponse.postValue(res.body())
 
                             // sourceTankRes.postValue(res)
@@ -257,7 +257,7 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.getWaterSummary(deviceId,date)
+                            val res =api.getWaterSummary(deviceId,date)
                             waterSummaryRes.postValue(res.body())
 
                             // sourceTankRes.postValue(res)
@@ -283,7 +283,7 @@ class MainActivityViewModel : BaseViewModel(){
        fun getDeviceLocationAndStatus(deviceId : String){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.getDeviceLocationAndStatus(deviceId)
+                            val res =api.getDeviceLocationAndStatus(deviceId)
                             deviceStatusAndResponse.postValue(res.body())
 
                             // sourceTankRes.postValue(res)
@@ -310,7 +310,7 @@ class MainActivityViewModel : BaseViewModel(){
        fun getNotifications(){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            var res =api.getNotifications(0,10)
+                            val res =api.getNotifications(0,10)
                             // sourceTankRes.postValue(res)
                             notificationRes.postValue(res.body())
                      }

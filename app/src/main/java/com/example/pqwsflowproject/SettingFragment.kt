@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.pqwsflowproject.Interface.TileClick
 import com.example.pqwsflowproject.databinding.SettingsScreenBinding
+import com.example.pqwsflowproject.network.Repository
 import com.github.dhaval2404.imagepicker.ImagePicker
 
 
@@ -111,6 +112,7 @@ class SettingFragment : Fragment() {
 
             ContextCompat.startActivity(binding.logoutBack.context, intent, null)
             activity?. finish()
+            Repository.firstlogin = false
         }
 
 

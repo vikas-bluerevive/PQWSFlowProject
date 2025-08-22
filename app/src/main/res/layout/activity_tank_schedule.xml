@@ -42,7 +42,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="25dp"
         android:text="Tank Name"
-        android:fontFamily="@font/nunito_variablefont_wght"
+        android:fontFamily="@font/opensans_variablfont"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -64,16 +64,19 @@
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="20dp"
+
         android:layout_weight=".28"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/border_grey"
         app:layout_constraintTop_toBottomOf="@+id/view2">
-       <TextView
+      <!-- <TextView
            android:text="Instant Water Supply"
            android:layout_width="wrap_content"
            android:fontFamily="@font/nunito_variablefont_wght"
@@ -86,9 +89,9 @@
             android:checked="true"
             android:thumb="@drawable/customthumb"
             android:track="@drawable/customtrack"
-           ></Switch>
-        <!--<Spinner
-           android:background="@drawable/border_grey"
+           ></Switch>-->
+        <Spinner
+
             android:id="@+id/spinner2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,7 +100,7 @@
             android:gravity="center"
             android:spinnerMode="dropdown"
             tools:layout_editor_absoluteX="113dp"
-            tools:layout_editor_absoluteY="104dp" />-->
+            tools:layout_editor_absoluteY="104dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -105,25 +108,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
 
         android:layout_weight=".28"
         android:background="@drawable/border_grey"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
         <EditText
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:id="@+id/editTimeSchedule"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:focusable="true"
-            android:fontFamily="@font/nunito_variablefont_wght"
+            android:fontFamily="@font/opensans_variablfont"
             android:text="Time Schedule Water Supply"
             android:textSize="15sp"
             android:inputType="text"
@@ -147,7 +150,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
 
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:layout_weight=".28"
 
@@ -161,8 +164,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/nunito_variablefont_wght"
-            android:layout_marginStart="10dp"
+            android:textSize="15sp"
+            android:fontFamily="@font/opensans_variablfont"
+            android:layout_marginStart="14dp"
             android:text="Water Required (In Liters)"></TextView>
 
         <com.google.android.material.slider.Slider
@@ -209,7 +213,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
         android:text="Submit"
         android:textColor="@color/white"
@@ -234,6 +238,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="6dp"
+            android:textSize="15sp"
+            android:fontFamily="@font/opensans_variablfont"
             android:text="Valve Status"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -259,6 +265,7 @@
                     android:layout_marginStart="11dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="10dp"
+
                     android:text="ON"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -316,7 +323,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="29dp"
                     android:text="Water Contain"
-                    android:fontFamily="@font/nunito_variablefont_wght"
+                    android:fontFamily="@font/opensans_variablfont"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -331,7 +338,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="8dp"
                     android:text="2000 L"
-                    android:fontFamily="@font/nunito_variablefont_wght"
+                    android:fontFamily="@font/opensans_variablfont"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -345,7 +352,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="9dp"
                     android:text="+20% month over month"
-                    android:fontFamily="@font/nunito_variablefont_wght"
+                    android:fontFamily="@font/opensans_variablfont"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView6">
@@ -382,7 +389,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="32dp"
                     android:text=" Water Required"
-                    android:fontFamily="@font/nunito_variablefont_wght"
+                    android:fontFamily="@font/opensans_variablfont"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -395,7 +402,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="9dp"
                     android:text="1000L"
-                    android:fontFamily="@font/nunito_variablefont_wght"
+                    android:fontFamily="@font/opensans_variablfont"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -409,7 +416,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:text="+30% month over month"
-                    android:fontFamily="@font/nunito_variablefont_wght"
+                    android:fontFamily="@font/opensans_variablfont"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView8">
@@ -435,7 +442,7 @@
             android:textSize="15sp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="15dp"
-            android:fontFamily="@font/nunito_variablefont_wght"
+            android:fontFamily="@font/opensans_variablfont"
             android:text="Daily Flow By Hour"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -457,7 +464,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
             android:text="13-07-2025"
-            android:fontFamily="@font/nunito_variablefont_wght"
+            android:fontFamily="@font/opensans_variablfont"
             app:layout_constraintEnd_toStartOf="@+id/imageView12"
             app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -479,7 +486,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
                 android:text="Time Slot"
-                android:fontFamily="@font/nunito_variablefont_wght"
+                android:fontFamily="@font/opensans_variablfont"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -488,7 +495,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="10dp"
-                android:fontFamily="@font/nunito_variablefont_wght"
+                android:fontFamily="@font/opensans_variablfont"
                 android:text="Water Level (In Liters)"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -530,9 +537,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Water Needed Every Day"
-                android:fontFamily="@font/nunito_variablefont_wght"
+                android:fontFamily="@font/opensans_variablfont"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <com.github.mikephil.charting.charts.LineChart

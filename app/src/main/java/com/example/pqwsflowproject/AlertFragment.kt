@@ -78,6 +78,15 @@ class AlertFragment : Fragment() {
                 binding.recyclerAlertListing.layoutManager = LinearLayoutManager(activity,
                     LinearLayoutManager.VERTICAL,false)
                 binding.recyclerAlertListing.adapter = alertAdapter
+            }.run{
+
+                if(arrayContent.isEmpty()){
+                    binding.recyclerAlertListing.visibility = View.GONE
+                    binding.emptyView.visibility = View.VISIBLE
+                }else{
+                    binding.recyclerAlertListing.visibility = View.VISIBLE
+                    binding.emptyView.visibility = View.GONE
+                }
             }
         })
 

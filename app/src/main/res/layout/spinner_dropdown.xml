@@ -20,7 +20,7 @@
     android:id="@android:id/text1"
     style="?attr/spinnerDropDownItemStyle"
     android:singleLine="true"
-    android:fontFamily="@font/nunito_variablefont_wght"
+    android:fontFamily="@font/opensans_variablfont"
     android:layout_width="match_parent"
     android:layout_height="?attr/dropdownListPreferredItemHeight"
     android:ellipsize="marquee"/>

@@ -148,7 +148,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         mainActivityViewModel.getLocations()
 
         mainActivityViewModel.locationRes.observe(viewLifecycleOwner, Observer {
-            var locRes :LocationResponse? = it
+            val locRes :LocationResponse? = it
             locRes?.let {
 
 
@@ -221,9 +221,9 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         })*/
         mainActivityViewModel.result.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                googleMap?.let { it1 -> addPolyline(it, it1) };
-                googleMap?.let { it1 -> positionCamera(it.routes[overview], it1) };
-                googleMap?.let { it1 -> addMarkersToMap(it, it1) };
+                googleMap?.let { it1 -> addPolyline(it, it1) }
+                googleMap?.let { it1 -> positionCamera(it.routes[overview], it1) }
+                googleMap?.let { it1 -> addMarkersToMap(it, it1) }
             }
         })
         val areaCode = arrayOf("Select Area", "Area 1", "Area2")
@@ -268,7 +268,7 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         })
 
         mainActivityViewModel.deviceStatusAndResponse.observe(viewLifecycleOwner, Observer{
-            var deviceStatus : DeviceLocationResponse? = it
+            val deviceStatus : DeviceLocationResponse? = it
             deviceStatus?.let{
             Log.e("DeviceStatus","device "+deviceStatus)
                  latitute = it.data?.latitude!!

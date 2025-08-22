@@ -69,7 +69,7 @@ class PastSchedulesAdapter(var arrayPast: ArrayList<PastItem>) : RecyclerView.Ad
 
         holder.getDayAndTime(arrayPast.get(position).time)
 
-        holder.tankText.setText(arrayPast.get(position).targetTankName)
+        holder.tankText.setText(arrayPast.get(position).targetTankName+" ,")
         holder.textArea.setText(arrayPast.get(position).targetTankLocation)
     }
 }

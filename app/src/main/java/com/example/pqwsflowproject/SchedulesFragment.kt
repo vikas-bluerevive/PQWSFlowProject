@@ -90,6 +90,25 @@ class SchedulesFragment : Fragment() {
                 binding.recyclerPastListing.adapter = adapter2
 
 
+
+            }.run {
+              /*  if (arrayPast.isEmpty()) {
+                    binding.recyclerPastListing.setVisibility(View.GONE);
+                    binding.emptyView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    binding.recyclerPastListing.setVisibility(View.VISIBLE);
+                    binding.emptyView.setVisibility(View.GONE);
+                }
+
+                if (arrayUpcoming.isEmpty()) {
+                    binding.recyclerUpcomingListing.setVisibility(View.GONE);
+                    binding.emptyView2.setVisibility(View.VISIBLE);
+                }
+                else {
+                    binding.recyclerUpcomingListing.setVisibility(View.VISIBLE);
+                    binding.emptyView2.setVisibility(View.GONE);
+                }*/
             }
         })
 

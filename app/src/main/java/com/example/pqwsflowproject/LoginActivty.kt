@@ -22,6 +22,7 @@ import com.example.pqwsflowproject.databinding.ActivityLoginBinding
 import com.example.pqwsflowproject.databinding.ActivityMainBinding
 import com.example.pqwsflowproject.model.LoginResponse
 import com.example.pqwsflowproject.model.LoginResponse2
+import com.example.pqwsflowproject.network.Repository
 import com.example.pqwsflowproject.ui.theme.PQWSFlowProjectTheme
 import com.example.pqwsflowproject.utils.CommonFunction
 import com.example.pqwsflowproject.viewmodels.LoginViewModel
@@ -68,7 +69,7 @@ class LoginActivty: FragmentActivity() {
 
                 Toast.makeText(this,"Enter valid Password",Toast.LENGTH_LONG).show()
             }else{
-
+                Repository.firstlogin = true
                 loginViewModel.loginIntoApp(binding.editEmail.text.toString(),binding.editPassword.text.toString())
 
                 /*val intent =     Intent(binding.materialButton3.context, MainActivity::class.java)
@@ -80,6 +81,12 @@ class LoginActivty: FragmentActivity() {
 
                 ContextCompat.startActivity(binding.materialButton3.context, intent, null)
                 finish()*/
+
+                prefs.edit()     .putBoolean("LoginKey", true).commit()
+                val intent = Intent(binding.materialButton3.context, MainActivity::class.java)
+
+                ContextCompat.startActivity(binding.materialButton3.context, intent, null)
+                finish()
 
             }
 

@@ -15,8 +15,8 @@
         android:layout_marginStart="135dp"
         android:layout_marginTop="33dp"
         android:text="Schedules"
-        android:fontFamily="@font/nunito_variablefont_wght"
-        android:textSize="25sp"
+        android:fontFamily="@font/opensans_variablfont"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,13 +30,19 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="83dp"
         android:text="Upcoming"
-        android:fontFamily="@font/nunito_variablefont_wght"
+        android:fontFamily="@font/opensans_variablfont"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </TextView>
+    <RelativeLayout
+        android:id="@+id/relativeCon"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerUpcomingListing"
@@ -45,8 +51,18 @@
         android:layout_marginTop="2dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:text="No Schedule Availabe"
+        android:visibility="gone"
+      ></TextView>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textView16"
@@ -55,14 +71,20 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="15dp"
         android:text="Past"
-        android:fontFamily="@font/nunito_variablefont_wght"
+        android:fontFamily="@font/opensans_variablfont"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerUpcomingListing">
+        app:layout_constraintTop_toBottomOf="@+id/relativeCon">
 
     </TextView>
-
+    <RelativeLayout
+        android:id="@+id/relativeCon2"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toTopOf="@+id/newschedulebutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPastListing"
         android:layout_width="match_parent"
@@ -71,10 +93,18 @@
         android:layout_marginBottom="5dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/newschedulebutton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+        />
+    <TextView
+        android:id="@+id/empty_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
 
+        android:layout_centerInParent="true"
+        android:text="No Past Schedule Availabe"
+        android:visibility="gone"
+        ></TextView>
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/newschedulebutton"
         android:layout_width="150dp"
@@ -86,7 +116,7 @@
         android:background="@drawable/rounded_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerPastListing">
+        app:layout_constraintTop_toBottomOf="@+id/relativeCon2">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
@@ -106,7 +136,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="40dp"
             android:text="New Schedule"
-            android:fontFamily="@font/nunito_variablefont_wght"
+            android:fontFamily="@font/opensans_variablfont"
             android:textColor="@color/black"
             android:textSize="12sp"
             android:textStyle="bold">

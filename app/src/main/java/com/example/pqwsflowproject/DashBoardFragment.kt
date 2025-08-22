@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ import com.example.pqwsflowproject.model.LocationResponse
 import com.example.pqwsflowproject.model.SourceTankResponse
 import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.TanKData
+import com.example.pqwsflowproject.network.Repository
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 
@@ -124,7 +126,11 @@ class DashBoardFragment : Fragment() {
 
                         areaCodeAdapter?.notifyDataSetChanged()
                     }
-                    binding.spinner2.setSelection(position+1)
+                   /* if(Repository.firstlogin == false) {
+                        binding.spinner2.setSelection(position + 1)
+                    }else{
+                        binding.spinner2.setSelection(0)
+                    }*/
 
                 }
 
@@ -156,7 +162,12 @@ class DashBoardFragment : Fragment() {
 
                         sourceTankCodeAdapter?.notifyDataSetChanged()
                     }
-                    binding.spinner3.setSelection(position+1)
+                   /* if(Repository.firstlogin == false){
+                        binding.spinner3.setSelection(position+1)
+                    }else{
+                        binding.spinner3.setSelection(0)
+                    }*/
+
                 }
 
             }
@@ -212,7 +223,11 @@ class DashBoardFragment : Fragment() {
 
                    supplyTankCodeAdapter?.notifyDataSetChanged()
                }
-               binding.spinner4.setSelection(position+1)
+              /* if(Repository.firstlogin ==false) {
+                   binding.spinner4.setSelection(position + 1)
+               }else{
+                   binding.spinner4.setSelection(0)
+               }*/
            }
           var tankAdapter = TankAdapter(tankArrayList,pref)
            binding.recyclerTankersListing.layoutManager = LinearLayoutManager(activity,
@@ -220,10 +235,20 @@ class DashBoardFragment : Fragment() {
            binding.recyclerTankersListing.adapter = tankAdapter
 
 
-           binding.view3.visibility = View.VISIBLE
-           binding.view4.visibility = View.VISIBLE
-           binding.textView17.visibility = View.VISIBLE
-           binding.recyclerTankersListing.visibility = View.VISIBLE
+           var spinner2position = binding.spinner2.selectedItemPosition
+           Log.e("SelectedItemPosition","selected item position "+spinner2position)
+           if(spinner2position!=0) {
+               binding.view3.visibility = View.VISIBLE
+               binding.view4.visibility = View.VISIBLE
+               binding.textView17.visibility = View.VISIBLE
+               binding.recyclerTankersListing.visibility = View.VISIBLE
+           }else{
+
+               binding.view3.visibility = View.INVISIBLE
+               binding.view4.visibility = View.INVISIBLE
+               binding.textView17.visibility = View.INVISIBLE
+               binding.recyclerTankersListing.visibility = View.INVISIBLE
+           }
        }
    })
 
@@ -244,9 +269,18 @@ class DashBoardFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                if(p2!=0){
-
+                   Repository.firstlogin = false
                    contentLocation.get(p2 -1).id?.let { mainActivityViewModel.getSourceTank(it) }
                    contentLocation.get(p2 -1).id?.let { pref.edit().putInt("locId",it) }?.commit()
+
+               }else if(p2==0){
+                   binding.spinner3.setSelection(0)
+                   binding.spinner4.setSelection(0)
+                   sourceTankArray.clear()
+                   sourceTankArray.add("Select Source Tank")
+
+                   supplyTankArray.clear()
+                   supplyTankArray.add("Select Supply Tank")
                }
 
             }
@@ -274,15 +308,47 @@ class DashBoardFragment : Fragment() {
                         sourceid?.let { mainActivityViewModel.getSupplyTank(it) }
                         sourceid?.let { pref.edit().putInt("sourceId",it) }?.commit()
                     }
+                    var spinner2position = binding.spinner2.selectedItemPosition
+                    Log.e("SelectedItemPosition","selected item position2 "+spinner2position)
+                    if(spinner2position!=0) {
+                        binding.view3.visibility = View.VISIBLE
+                        binding.view4.visibility = View.VISIBLE
+                        binding.textView17.visibility = View.VISIBLE
+                        binding.recyclerTankersListing.visibility = View.VISIBLE
+                    }else{
 
+                        binding.view3.visibility = View.INVISIBLE
+                        binding.view4.visibility = View.INVISIBLE
+                        binding.textView17.visibility = View.INVISIBLE
+                        binding.recyclerTankersListing.visibility = View.INVISIBLE
+                    }
 
+                }else if(p2==0){
+
+                    binding.spinner4.setSelection(0)
+                    binding.spinner2.setSelection(0)
+                    binding.view3.visibility = View.INVISIBLE
+                    binding.view4.visibility = View.INVISIBLE
+                    binding.textView17.visibility = View.INVISIBLE
+                    binding.recyclerTankersListing.visibility = View.INVISIBLE
                 }else{
+                    var spinner2position = binding.spinner2.selectedItemPosition
+                    Log.e("SelectedItemPosition","selected item position2 "+spinner2position)
+                    if(spinner2position!=0) {
+                        binding.view3.visibility = View.VISIBLE
+                        binding.view4.visibility = View.VISIBLE
+                        binding.textView17.visibility = View.VISIBLE
+                        binding.recyclerTankersListing.visibility = View.VISIBLE
+                    }else{
 
-                    binding.view3.visibility = View.GONE
-                    binding.view4.visibility = View.GONE
-                    binding.textView17.visibility = View.GONE
-                    binding.recyclerTankersListing.visibility = View.GONE
+                        binding.view3.visibility = View.INVISIBLE
+                        binding.view4.visibility = View.INVISIBLE
+                        binding.textView17.visibility = View.INVISIBLE
+                        binding.recyclerTankersListing.visibility = View.INVISIBLE
+                    }
                 }
+
+
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -312,10 +378,12 @@ class DashBoardFragment : Fragment() {
                  p2: Int,
                  p3: Long
              ) {
-                 if (::contentSupplyTank.isInitialized) {
-                     var supplyid =   contentSupplyTank.get(p2-1).id
+                 if(p2!=0) {
+                     if (::contentSupplyTank.isInitialized) {
+                         var supplyid = contentSupplyTank.get(p2 - 1).id
 
-                     supplyid?.let { pref.edit().putInt("supplyId",it) }?.commit()
+                         supplyid?.let { pref.edit().putInt("supplyId", it) }?.commit()
+                     }
                  }
              }
 

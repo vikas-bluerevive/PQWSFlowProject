@@ -32,7 +32,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="20dp"
             android:text="Water Level Alert"
-            android:fontFamily="@font/nunito_variablefont_wght"
+            android:fontFamily="@font/opensans_variablfont"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
@@ -47,7 +47,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="8dp"
             android:text="Tank1 -"
-            android:fontFamily="@font/nunito_variablefont_wght"
+            android:fontFamily="@font/opensans_variablfont"
             android:textSize="11sp"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toBottomOf="@+id/textView18">
@@ -61,7 +61,7 @@
             android:layout_marginStart="3dp"
             android:layout_marginTop="8dp"
             android:text="Low Water Level"
-            android:fontFamily="@font/nunito_variablefont_wght"
+            android:fontFamily="@font/opensans_variablfont"
             android:textSize="11sp"
             app:layout_constraintStart_toEndOf="@+id/textView19"
             app:layout_constraintTop_toBottomOf="@+id/textView18"></TextView>
@@ -74,7 +74,7 @@
             android:layout_marginTop="45dp"
             android:layout_marginEnd="20dp"
             android:text="2 hour ago"
-            android:fontFamily="@font/nunito_variablefont_wght"
+            android:fontFamily="@font/opensans_variablfont"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView40"
             app:layout_constraintTop_toTopOf="parent">
