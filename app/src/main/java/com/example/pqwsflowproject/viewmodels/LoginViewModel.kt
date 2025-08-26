@@ -32,7 +32,7 @@ class LoginViewModel: BaseViewModel() {
                 var response  = api.Login(body)
 
                 successfullyLogin.postValue(response.body())
-                feedBackMessage.postValue( response.message())
+                feedBackMessage.postValue( response.raw().message())
                 viewModelScope.launch(Dispatchers.Main){
                     progressBar.value= false
                 }
@@ -49,7 +49,10 @@ class LoginViewModel: BaseViewModel() {
             progressBar.value = false
             feedBackMessage.value = e.message!!
 
-    }
+    }catch(e: Exception){
+            progressBar.value = false
+            feedBackMessage.value = e.message!!
+        }
 
     }
 

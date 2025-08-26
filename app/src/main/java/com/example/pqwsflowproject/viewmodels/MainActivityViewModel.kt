@@ -1,5 +1,6 @@
 package com.example.pqwsflowproject.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,7 @@ import com.example.pqwsflowproject.network.Repository
 import com.example.pqwsflowproject.utils.JsonParsor
 import com.example.pqwsflowproject.utils.NoInternetException
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Response
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
 import com.google.maps.model.DirectionsResult
@@ -68,9 +70,10 @@ class MainActivityViewModel : BaseViewModel(){
        fun getLocations(){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                           val res : LocationResponse?  =api.getLocation(0,10).body()
+                           val res : retrofit2.Response<LocationResponse>? =api.getLocation(0,10)
+                            Log.e("Locationresponse","locaton response are "+res)
                             res?.let{
-                                   locationRes.postValue(it)
+                                   locationRes.postValue(it.body())
                             }
 
                      }
@@ -86,6 +89,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
        }
@@ -112,6 +118,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
        }
@@ -134,6 +143,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
 
@@ -165,6 +177,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
 
@@ -199,6 +214,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
 
@@ -225,6 +243,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
        }
@@ -250,6 +271,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
        }
@@ -274,6 +298,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
 
@@ -300,6 +327,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
 
@@ -326,6 +356,9 @@ class MainActivityViewModel : BaseViewModel(){
                      progressBar.value = false
                      feedBackMessage.value = e.message!!
 
+              }catch(e: Exception){
+                     progressBar.value = false
+                     feedBackMessage.value = e.message!!
               }
 
 

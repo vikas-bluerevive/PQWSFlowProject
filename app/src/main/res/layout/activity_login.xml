@@ -92,10 +92,11 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:focusable="true"
+
             android:hint="email@email.com"
             android:inputType="textEmailAddress"
             android:fontFamily="@font/nunito_variablefont_wght"
-            android:textColor="@color/white"></EditText>
+            android:textColor="@color/black"></EditText>
 
     </RelativeLayout>
 
@@ -125,7 +126,7 @@
             android:inputType="textPassword"
             android:maxLength="11"
             android:fontFamily="@font/nunito_variablefont_wght"
-            android:textColor="@color/white"></EditText>
+            android:textColor="@color/black"></EditText>
 
     </RelativeLayout>
 

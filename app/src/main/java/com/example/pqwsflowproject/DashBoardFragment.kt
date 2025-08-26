@@ -31,6 +31,7 @@ import com.example.pqwsflowproject.model.SourceTankResponse
 import com.example.pqwsflowproject.model.SupplyTankResponse
 import com.example.pqwsflowproject.model.TanKData
 import com.example.pqwsflowproject.network.Repository
+import com.example.pqwsflowproject.utils.CommonFunction
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 
@@ -99,8 +100,15 @@ class DashBoardFragment : Fragment() {
          //prefs = PreferenceManager.getDefaultSharedPreferences(activity) as PreferenceManager?
         pref = activity?.getSharedPreferences("PrefMode", MODE_PRIVATE)!!;
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        pref.edit().putInt("locId",0).commit()
+        pref.edit().putInt("sourceId",11).commit()
+        pref.edit().putInt("supplyId", 12).commit()
 
-        mainActivityViewModel.getLocations()
+        activity?.let {
+            if(CommonFunction.isNetworkConnected(it)) {
+                mainActivityViewModel.getLocations()
+            }
+        }
         areaArray.add("Select Area")
         sourceTankArray.add("Select Source Tank")
         supplyTankArray.add("Select Supply Tank")
@@ -425,14 +433,20 @@ class DashBoardFragment : Fragment() {
         }
 
         binding.materialButton3.setOnClickListener {
+            val supplyTankPosition = binding.spinner4.selectedItemPosition
+            if(supplyTankPosition !=0) {
+                val intent =
+                    Intent(binding.materialButton3.context, TankScheduleActivity::class.java)
+                if (::contentSupplyTank.isInitialized) {
+                    var supplyTankPos = binding.spinner4.selectedItemPosition
+                    intent.putExtra("TankName", contentSupplyTank.get(supplyTankPos - 1).name)
+                }
 
-            val intent =     Intent( binding.materialButton3.context, TankScheduleActivity::class.java)
-            if (::contentSupplyTank.isInitialized){
-                var supplyTankPos = binding.spinner4.selectedItemPosition
-                intent.putExtra("TankName",contentSupplyTank.get(supplyTankPos -1).name)
+                ContextCompat.startActivity(binding.materialButton3.context, intent, null)
+            }else{
+                Toast.makeText(activity,"Select Supply Tank" , Toast.LENGTH_SHORT).show()
+
             }
-
-            ContextCompat.startActivity( binding.materialButton3.context, intent, null)
         }
 
 

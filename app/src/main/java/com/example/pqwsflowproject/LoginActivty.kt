@@ -70,7 +70,12 @@ class LoginActivty: FragmentActivity() {
                 Toast.makeText(this,"Enter valid Password",Toast.LENGTH_LONG).show()
             }else{
                 Repository.firstlogin = true
-                loginViewModel.loginIntoApp(binding.editEmail.text.toString(),binding.editPassword.text.toString())
+                if(CommonFunction.isNetworkConnected(this)) {
+                    loginViewModel.loginIntoApp(
+                        binding.editEmail.text.toString(),
+                        binding.editPassword.text.toString()
+                    )
+                }
 
                 /*val intent =     Intent(binding.materialButton3.context, MainActivity::class.java)
 
@@ -83,10 +88,10 @@ class LoginActivty: FragmentActivity() {
                 finish()*/
 
                 prefs.edit()     .putBoolean("LoginKey", true).commit()
-                val intent = Intent(binding.materialButton3.context, MainActivity::class.java)
+              /*  val intent = Intent(binding.materialButton3.context, MainActivity::class.java)
 
-                ContextCompat.startActivity(binding.materialButton3.context, intent, null)
-                finish()
+                ContextCompat.startActivity(binding.materialButton3.context, intent, null)*/
+            //    finish()
 
             }
 
@@ -99,15 +104,15 @@ class LoginActivty: FragmentActivity() {
 
         loginViewModel.progressBar.observe(this, Observer<Boolean> {
             if (it) {
-                CommonFunction.showProgressBar(this,"Loading..")
+               CommonFunction.showProgressBar(this,"Loading..")
             } else {
-                CommonFunction.hideProgressBar()
+               CommonFunction.hideProgressBar()
             }
         })
 
         loginViewModel.successfullyLogin.observe(this, Observer {
                  var loginRes : LoginResponse2? = it
-       //     Log.e("LoginResponse","log in response "+ loginRes.name+"   "+loginRes.status+" "+loginRes.userId)
+          Log.e("LoginResponse","log in response "+ loginRes)
 
             loginRes?.let {
                   if(it.success ==true) {

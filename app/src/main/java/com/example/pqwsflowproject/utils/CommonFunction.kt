@@ -1,14 +1,17 @@
 package com.example.pqwsflowproject.utils
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.example.pqwsflowproject.R
+
 
 object CommonFunction {
     var mDialogProgress: AlertDialog? = null
@@ -45,5 +48,14 @@ object CommonFunction {
         if (mDialogProgress != null) {
             mDialogProgress!!.dismiss()
         }
+    }
+    fun isNetworkConnected(context : Context) : Boolean{
+        val cm =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork = cm.getActiveNetworkInfo()
+        val isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting()
+        return isConnected
     }
 }

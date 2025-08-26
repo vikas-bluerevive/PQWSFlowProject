@@ -24,6 +24,7 @@ import com.example.pqwsflowproject.model.ContentItem8
 import com.example.pqwsflowproject.model.DeviceLocationResponse
 import com.example.pqwsflowproject.model.DevicesResponse
 import com.example.pqwsflowproject.model.LocationResponse
+import com.example.pqwsflowproject.utils.CommonFunction
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -145,7 +146,11 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
         areaArray.add("Select Area")
         arrayDevices.add("Select Smart Boxes")
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-        mainActivityViewModel.getLocations()
+        activity?.let {
+            if(CommonFunction.isNetworkConnected(it)) {
+                mainActivityViewModel.getLocations()
+            }
+        }
 
         mainActivityViewModel.locationRes.observe(viewLifecycleOwner, Observer {
             val locRes :LocationResponse? = it
@@ -185,6 +190,10 @@ class MapScreenFragment : Fragment(), OnMapReadyCallback {
 
                    }
 
+                }else if(p2 ==0){
+                    arrayDevices.clear()
+                    arrayDevices.add("Select Smart Boxes")
+                    binding.spinner3.setSelection(0)
                 }
             }
 

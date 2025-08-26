@@ -42,7 +42,7 @@ class PastSchedulesAdapter(var arrayPast: ArrayList<PastItem>) : RecyclerView.Ad
 
             var days = arrayOf( "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY" )
 
-            var day = days[calendar.get(Calendar.DAY_OF_WEEK)]
+            var day = days[calendar.get(Calendar.DAY_OF_WEEK)-1]
 
             dayText.setText(day)
             currentTime = SimpleDateFormat("HH:mm:a", Locale.getDefault()).format(date)

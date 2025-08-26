@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -31,11 +30,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 class TankScheduleActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener,
 TimePickerDialog.OnTimeSetListener{
@@ -75,8 +74,7 @@ TimePickerDialog.OnTimeSetListener{
 
 
 
-
-        val instantWaterCode = arrayOf("Instant Water Supply", "true", "false")
+        val instantWaterCode = arrayOf("Instant Water Supply", "Yes", "No")
         val instantWaterCodeAdapter =
             ArrayAdapter<CharSequence>(
                 this,
@@ -206,9 +204,9 @@ TimePickerDialog.OnTimeSetListener{
             if(!binding.editTimeSchedule.text.toString().equals(" ")){
 
               //  if(binding.switch1?.isChecked == true){
-                    if(spinnerInstantSelection ==1){
+                    if(spinnerInstantSelection == 2){
                   mainActivityViewModel.createScedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0),binding.editTimeSchedule.text.toString())
-                }else if(spinnerInstantSelection == 2){
+                }else if(spinnerInstantSelection == 1){
                    // else if(binding.switch1?.isChecked == false){
                     mainActivityViewModel.createInstantSchedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0))
 
@@ -227,24 +225,43 @@ TimePickerDialog.OnTimeSetListener{
 
                 for((index, values) in hourFlowList.withIndex()){
                     var timeslot =""
-                     if(index < 10){
+                    if(index == 0){
+                        timeslot = "" + 12 + " Am" + " - " +  1 + " Am"
+                    }
+                    else if(index > 0 && index < 11){
+                        timeslot = "" + (index) + " Am" + " - " + (index + 1) + " Am"
+                    }else if(index == 11){
+                        timeslot = "" + (index)  + " Am" + " - " + (index + 1)  + " Pm"
+
+                    }else if(index == 12){
+                         timeslot = "" + (index)  + " Pm" + " - " + 1  + " Pm"
+                    } else if(index > 12 && index < 23){
+                        timeslot = "" + ( (index ) -12) + " Pm" + " - " +( (index + 1) - 12) + " Pm"
+                    }else if(index == 23){
+
+                         timeslot = "" + ((index ) -12)  + " Pm" + " - " +( (index + 1) - 12)  + " Am"
+                    }
+
+
+                 /*   if( index < 10){
                         timeslot = "" + (index+1) + " Am" + " - " + (index + 2) + " Am"
                     }else if(index == 10){
                         timeslot = "" + (index+1)  + " Am" + " - " + (index + 2)  + " Pm"
 
                     }else if(index == 11){
-                         timeslot = "" + (index+1)  + " Pm" + " - " + 1  + " Pm"
+                        timeslot = "" + (index+1)  + " Pm" + " - " + 1  + " Pm"
                     } else if(index > 11 && index < 22){
                         timeslot = "" + ( (index + 1) -12) + " Pm" + " - " +( (index + 2) - 12) + " Pm"
                     }else if(index == 22){
 
-                         timeslot = "" + ((index + 1) -12)  + " Pm" + " - " +( (index + 2) - 12)  + " Am"
+                        timeslot = "" + ((index + 1) -12)  + " Pm" + " - " +( (index + 2) - 12)  + " Am"
                     } else if(index == 23){
 
                         timeslot = "" + 12 + " Am" + " - " +  1 + " Am"
-                    }
+                    }*/
 
-                   val flowValues = FlowValues(timeslot, values.waterVolumeLitres as Double?)
+
+                    val flowValues = FlowValues(timeslot, values.waterVolumeLitres as Double?)
                     hoursFlowItems.add(flowValues)
                 }
                 //var flowValue = FlowValues()
@@ -281,6 +298,10 @@ TimePickerDialog.OnTimeSetListener{
             datePickerCalender(mYear,mMonth,mDay)
 
         }
+         var max_date_c = Calendar.getInstance();
+                max_date_c.set(Calendar.YEAR, 2);
+        val min_date_c = Calendar.getInstance()
+        min_date_c.set(Calendar.DAY_OF_MONTH,-7)
 
         val lineChart = binding.lineChart
         setupLineChartStyle(lineChart)
@@ -308,6 +329,41 @@ TimePickerDialog.OnTimeSetListener{
    //     )
    //     datePickerDialog2.show()
    //     datePickerDialog2.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+
+        var datpickerListener = object : DatePickerDialog.OnDateSetListener{
+            override fun onDateSet(
+                view: DatePickerDialog?,
+                year: Int,
+                monthOfYear: Int,
+                dayOfMonth: Int
+            ) {
+                date_time = dayOfMonth.toString() + "-"+"0" + (monthOfYear + 1) + "-" + year
+
+
+                            binding.dateText?.setText(date_time)
+                var date =""+year+"-"+"0"+(monthOfYear + 1)+"-"+dayOfMonth.toString()
+                            mainActivityViewModel.getWaterSummary(pref.getInt("supplyId",0),date)
+
+            }
+        }
+
+       var  datePickerDialog =   DatePickerDialog.newInstance(datpickerListener, mYear, mMonth, mDay);
+        datePickerDialog.setThemeDark(false);
+        datePickerDialog.showYearPickerFirst(false);
+        datePickerDialog.setTitle("Date Picker");
+        datePickerDialog.show(getFragmentManager(), "DatePickerDialog")
+
+
+        datePickerDialog.setOnDateSetListener(datpickerListener)
+
+        var max_date_c = Calendar.getInstance();
+       // max_date_c.set(Calendar.YEAR, max_date_c.get(Calendar.YEAR)+2);
+        val min_date_c = Calendar.getInstance()
+        min_date_c.set(Calendar.DAY_OF_MONTH,max_date_c.get(Calendar.DAY_OF_MONTH)-7)
+        datePickerDialog.setMinDate(min_date_c);
+        datePickerDialog.setMaxDate(max_date_c)
+
 
     }
 

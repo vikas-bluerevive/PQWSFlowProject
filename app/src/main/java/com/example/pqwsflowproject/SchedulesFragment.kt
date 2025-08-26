@@ -22,6 +22,7 @@ import com.example.pqwsflowproject.databinding.SchedulesScreenBinding
 import com.example.pqwsflowproject.model.PastItem
 import com.example.pqwsflowproject.model.SchedulesResponse
 import com.example.pqwsflowproject.model.UpcomingItem
+import com.example.pqwsflowproject.utils.CommonFunction
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 
@@ -69,8 +70,15 @@ class SchedulesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         pref = activity?.getSharedPreferences("PrefMode", MODE_PRIVATE)!!;
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        activity?.let {
+            if(CommonFunction.isNetworkConnected(it)) {
 
-        mainActivityViewModel.getAllSchedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0))
+                mainActivityViewModel.getAllSchedule(
+                    pref.getInt("sourceId", 0),
+                    pref.getInt("supplyId", 0)
+                )
+            }
+        }
 
         mainActivityViewModel.schedulesResponse.observe(viewLifecycleOwner , Observer {
             var schedulesResponse : SchedulesResponse? = it

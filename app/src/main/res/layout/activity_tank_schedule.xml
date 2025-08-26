@@ -149,7 +149,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-
+        android:visibility="gone"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:layout_weight=".28"
@@ -294,8 +294,8 @@
     <LinearLayout
         android:id="@+id/linear1"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="180dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contraint11">
@@ -308,7 +308,7 @@
             android:layout_marginTop="21dp"
             android:elevation="12dp"
             android:layout_weight="1"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialButton3">
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -339,7 +339,7 @@
                     android:layout_marginTop="8dp"
                     android:text="2000 L"
                     android:fontFamily="@font/opensans_variablfont"
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView4">
@@ -374,7 +374,7 @@
             android:layout_marginStart="10dp"
             android:elevation="12dp"
             android:layout_weight="1"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialButton3">
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -401,9 +401,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="9dp"
-                    android:text="1000L"
+                    android:text="1000 L"
                     android:fontFamily="@font/opensans_variablfont"
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView7">

@@ -108,11 +108,16 @@ class SettingFragment : Fragment() {
 
         binding.logoutBack.setOnClickListener {
             prefs.edit().putBoolean("LoginKey", false).commit()
+
+            pref.edit().putInt("locId",0).commit()
+            pref.edit().putInt("sourceId",0).commit()
+            pref.edit().putInt("supplyId", 0).commit()
             val intent = Intent(binding.logoutBack.context, LoginActivty::class.java)
 
             ContextCompat.startActivity(binding.logoutBack.context, intent, null)
             activity?. finish()
             Repository.firstlogin = false
+
         }
 
 

@@ -5,15 +5,19 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.util.concurrent.TimeUnit
 
 object Repository {
     var firstlogin = false
-    val BASE_URL ="https://987c7c36379f.ngrok-free.app/api/v1/"
+    val BASE_URL ="https://tanktotankbackend.onrender.com/api/v1/"
     var logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     val httpClient: OkHttpClient = OkHttpClient
         .Builder()
         .addInterceptor(logging)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
         .build()
 
    /* val httpClient: OkHttpClient = OkHttpClient

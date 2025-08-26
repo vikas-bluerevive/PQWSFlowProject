@@ -14,6 +14,7 @@ import com.example.pqwsflowproject.adapter.AlertAdapter
 import com.example.pqwsflowproject.databinding.AlertScreenBinding
 import com.example.pqwsflowproject.model.ContentItem5
 import com.example.pqwsflowproject.model.NotificationResponse
+import com.example.pqwsflowproject.utils.CommonFunction
 import com.example.pqwsflowproject.viewmodels.MainActivityViewModel
 import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
@@ -66,7 +67,11 @@ class AlertFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val balloon = createBallon()
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-        mainActivityViewModel.getNotifications()
+        activity?.let {
+            if(CommonFunction.isNetworkConnected(it)) {
+                mainActivityViewModel.getNotifications()
+            }
+        }
 
         mainActivityViewModel.notificationRes.observe(viewLifecycleOwner, Observer {
           var notificationResponse : NotificationResponse? = it
@@ -111,6 +116,7 @@ class AlertFragment : Fragment() {
                 p3: Long
             ) {
                  if(p2 == 1){
+                     arrayUrgent.clear()
                      for(item in arrayContent){
 
                          if(item.severity.equals("HIGH")){
@@ -123,7 +129,7 @@ class AlertFragment : Fragment() {
                          LinearLayoutManager.VERTICAL,false)
                      binding.recyclerAlertListing.adapter = alertAdapter
                  }else if(p2 == 2){
-
+                     arrayMaitainess.clear()
                      for(item in arrayContent){
 
                          if(item.severity.equals("MEDIUM") || item.severity.equals("LOW")){
