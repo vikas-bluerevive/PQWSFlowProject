@@ -100,9 +100,9 @@ class DashBoardFragment : Fragment() {
          //prefs = PreferenceManager.getDefaultSharedPreferences(activity) as PreferenceManager?
         pref = activity?.getSharedPreferences("PrefMode", MODE_PRIVATE)!!;
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-        pref.edit().putInt("locId",0).commit()
+        /*pref.edit().putInt("locId",0).commit()
         pref.edit().putInt("sourceId",11).commit()
-        pref.edit().putInt("supplyId", 12).commit()
+        pref.edit().putInt("supplyId", 12).commit()*/
 
         activity?.let {
             if(CommonFunction.isNetworkConnected(it)) {
@@ -170,6 +170,7 @@ class DashBoardFragment : Fragment() {
 
                         sourceTankCodeAdapter?.notifyDataSetChanged()
                     }
+                    binding.textView8.setText(""+contentSourceTank.get(0).capacityLitres+" "+"L")
                    /* if(Repository.firstlogin == false){
                         binding.spinner3.setSelection(position+1)
                     }else{
@@ -443,10 +444,10 @@ class DashBoardFragment : Fragment() {
                 }
 
                 ContextCompat.startActivity(binding.materialButton3.context, intent, null)
-            }else{
-                Toast.makeText(activity,"Select Supply Tank" , Toast.LENGTH_SHORT).show()
+           }else{
+               Toast.makeText(activity,"Select Supply Tank" , Toast.LENGTH_SHORT).show()
 
-            }
+          }
         }
 
 

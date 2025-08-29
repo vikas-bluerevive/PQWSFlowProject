@@ -91,6 +91,8 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:3.8.0")
     implementation ("com.squareup.retrofit2:converter-scalars:2.1.0")
 
+    implementation ("com.google.android.material:material:1.9.0")
+
     // Add this line for the Chart Library
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     // Import the Firebase BoM
@@ -104,6 +106,6 @@ dependencies {
 
     implementation ("com.google.android.material:material:1.4.0")
 
-    //walder date picker
+    //wdullaer date picker
     implementation("com.wdullaer:materialdatetimepicker:3.6.4")
 }

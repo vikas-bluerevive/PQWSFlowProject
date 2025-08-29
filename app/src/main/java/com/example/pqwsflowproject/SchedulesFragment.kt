@@ -100,23 +100,23 @@ class SchedulesFragment : Fragment() {
 
 
             }.run {
-              /*  if (arrayPast.isEmpty()) {
+                if (arrayPast.isEmpty()) {
                     binding.recyclerPastListing.setVisibility(View.GONE);
-                    binding.emptyView.setVisibility(View.VISIBLE);
+                    binding.emptyView2.setVisibility(View.VISIBLE);
                 }
                 else {
                     binding.recyclerPastListing.setVisibility(View.VISIBLE);
-                    binding.emptyView.setVisibility(View.GONE);
+                    binding.emptyView2.setVisibility(View.GONE);
                 }
 
                 if (arrayUpcoming.isEmpty()) {
                     binding.recyclerUpcomingListing.setVisibility(View.GONE);
-                    binding.emptyView2.setVisibility(View.VISIBLE);
+                    binding.emptyView.setVisibility(View.VISIBLE);
                 }
                 else {
                     binding.recyclerUpcomingListing.setVisibility(View.VISIBLE);
-                    binding.emptyView2.setVisibility(View.GONE);
-                }*/
+                    binding.emptyView.setVisibility(View.GONE);
+                }
             }
         })
 

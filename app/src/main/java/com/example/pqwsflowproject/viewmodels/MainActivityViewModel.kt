@@ -70,10 +70,16 @@ class MainActivityViewModel : BaseViewModel(){
        fun getLocations(){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                           val res : retrofit2.Response<LocationResponse>? =api.getLocation(0,10)
-                            Log.e("Locationresponse","locaton response are "+res)
-                            res?.let{
-                                   locationRes.postValue(it.body())
+                            try {
+                                   val res: retrofit2.Response<LocationResponse>? =
+                                          api.getLocation(0, 10)
+                                   Log.e("Locationresponse", "locaton response are " + res)
+                                   res?.let {
+                                          locationRes.postValue(it.body())
+                                   }
+                            }catch(e:Exception){
+                                   e.printStackTrace()
+//                                   feedBackMessage.value = e.message
                             }
 
                      }
@@ -100,9 +106,16 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res : SourceTankResponse? =api.getSourceTank(0,10,locationId).body()
-                            res?.let{
-                                   sourceTankRes.postValue(it)
+                            try {
+                                   val res: SourceTankResponse? =
+                                          api.getSourceTank(0, 10, locationId).body()
+                                   res?.let {
+                                          sourceTankRes.postValue(it)
+                                   }
+                            }catch(e:Exception){
+                                   e.printStackTrace()
+                                  // progressBar.value = false
+                                  // feedBackMessage.value = e.message!!
                             }
 
                      }
@@ -128,8 +141,14 @@ class MainActivityViewModel : BaseViewModel(){
        fun getSupplyTank(sourceTankId:Int){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res =api.getSupplyTank(0,10,sourceTankId).body()
-                            supplyTankRes.postValue(res)
+                            try {
+                                   val res = api.getSupplyTank(0, 10, sourceTankId).body()
+                                   supplyTankRes.postValue(res)
+                            }catch(e:Exception){
+                                   e.printStackTrace()
+                                //   progressBar.value = false
+                               //    feedBackMessage.value = e.message!!
+                            }
                      }
 
                      /*val response =
@@ -158,11 +177,20 @@ class MainActivityViewModel : BaseViewModel(){
               progressBar.value= true
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res =api.createSchedule(schedule)
-                            createSchedule.postValue(res.body())
-                            //supplyTankRes.postValue(res)
-                            viewModelScope.launch(Dispatchers.Main){
-                                   progressBar.value= false
+                            try {
+                                   val res = api.createSchedule(schedule)
+                                   createSchedule.postValue(res.body())
+                                   //supplyTankRes.postValue(res)
+                                   viewModelScope.launch(Dispatchers.Main) {
+                                          progressBar.value = false
+                                   }
+                            }catch (e:Exception){
+                                   e.printStackTrace()
+                                   viewModelScope.launch(Dispatchers.Main) {
+                                          progressBar.value = false
+                                          feedBackMessage.value = e.message!!
+                                   }
+
                             }
                      }
 
@@ -194,12 +222,22 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res =api.createInstantSchedule(body)
-                            //supplyTankRes.postValue(res)
-                            createInstantSchedule.postValue(res.body())
+                            try {
+                                   val res = api.createInstantSchedule(body)
+                                   //supplyTankRes.postValue(res)
+                                   createInstantSchedule.postValue(res.body())
 
-                            viewModelScope.launch(Dispatchers.Main){
-                                   progressBar.value= false
+                                   viewModelScope.launch(Dispatchers.Main) {
+                                          progressBar.value = false
+                                   }
+                            }catch (e:Exception){
+                                   e.printStackTrace()
+                                   viewModelScope.launch(Dispatchers.Main) {
+                                          progressBar.value = false
+                                          feedBackMessage.value = e.message!!
+                                   }
+
+
                             }
                      }
 
@@ -226,8 +264,14 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res =api.getAllSchedules(sourceId,supplyId)
-                            schedulesResponse.postValue(res.body())
+                            try {
+                                   val res = api.getAllSchedules(sourceId, supplyId)
+                                   schedulesResponse.postValue(res.body())
+                            }catch(e:Exception){
+                                   e.printStackTrace()
+                                //   progressBar.value = false
+                               //    feedBackMessage.value = e.message!!
+                            }
 
                            // sourceTankRes.postValue(res)
                      }
@@ -254,8 +298,14 @@ class MainActivityViewModel : BaseViewModel(){
        fun getDeviceByCity(city:String){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res =api.getDevicesByCity(city,0,20)
-                            devicesResponse.postValue(res.body())
+                            try {
+                                   val res = api.getDevicesByCity(city, 0, 20)
+                                   devicesResponse.postValue(res.body())
+                            }catch(e:Exception){
+                                   e.printStackTrace()
+                               //    progressBar.value = false
+                                //   feedBackMessage.value = e.message!!
+                            }
 
                             // sourceTankRes.postValue(res)
                      }
@@ -281,8 +331,14 @@ class MainActivityViewModel : BaseViewModel(){
 
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res =api.getWaterSummary(deviceId,date)
-                            waterSummaryRes.postValue(res.body())
+                            try {
+                                   val res = api.getWaterSummary(deviceId, date)
+                                   waterSummaryRes.postValue(res.body())
+                            }catch(e:Exception){
+                                   e.printStackTrace()
+                                 //  progressBar.value = false
+                                //   feedBackMessage.value = e.message!!
+                            }
 
                             // sourceTankRes.postValue(res)
                      }
@@ -310,8 +366,14 @@ class MainActivityViewModel : BaseViewModel(){
        fun getDeviceLocationAndStatus(deviceId : String){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res =api.getDeviceLocationAndStatus(deviceId)
-                            deviceStatusAndResponse.postValue(res.body())
+                            try {
+                                   val res = api.getDeviceLocationAndStatus(deviceId)
+                                   deviceStatusAndResponse.postValue(res.body())
+                            }catch (e:Exception){
+                                   e.printStackTrace()
+                                  // progressBar.value = false
+                               //    feedBackMessage.value = e.message!!
+                            }
 
                             // sourceTankRes.postValue(res)
                      }
@@ -340,9 +402,15 @@ class MainActivityViewModel : BaseViewModel(){
        fun getNotifications(){
               try {
                      viewModelScope.launch(Dispatchers.IO) {
-                            val res =api.getNotifications(0,10)
-                            // sourceTankRes.postValue(res)
-                            notificationRes.postValue(res.body())
+                            try {
+                                   val res = api.getNotifications(0, 10)
+                                   // sourceTankRes.postValue(res)
+                                   notificationRes.postValue(res.body())
+                            }catch(e:Exception){
+                                   e.printStackTrace()
+                                 //  progressBar.value = false
+                               //    feedBackMessage.value = e.message!!
+                            }
                      }
 
                      /*val response =

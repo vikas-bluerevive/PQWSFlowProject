@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_centerInParent="true"
-        android:text="No Schedule Availabe"
+        android:text="No Schedule "
         android:visibility="gone"
       ></TextView>
     </RelativeLayout>
@@ -101,7 +101,7 @@
         android:gravity="center"
 
         android:layout_centerInParent="true"
-        android:text="No Past Schedule Availabe"
+        android:text="No Past Schedule "
         android:visibility="gone"
         ></TextView>
     </RelativeLayout>

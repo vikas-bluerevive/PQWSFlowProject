@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -81,12 +87,32 @@
         android:layout_weight=".28"
         android:background="@drawable/transparent_border"
         android:orientation="horizontal"
-        android:padding="10dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etEmailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
-        <EditText
+            >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editEmail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="7dp"
+            android:background="@android:color/transparent"
+            android:hint="email"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black"
+            android:fontFamily="@font/nunito_variablefont_wght"
+           />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--<EditText
             android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -96,7 +122,7 @@
             android:hint="email@email.com"
             android:inputType="textEmailAddress"
             android:fontFamily="@font/nunito_variablefont_wght"
-            android:textColor="@color/black"></EditText>
+            android:textColor="@color/black"></EditText>-->
 
     </RelativeLayout>
 
@@ -110,23 +136,43 @@
         android:layout_weight=".28"
         android:background="@drawable/transparent_border"
         android:orientation="horizontal"
-        android:padding="10dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etPasswordLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:passwordToggleEnabled="true"
+          >
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="7dp"
+                android:background="@android:color/transparent"
+                android:hint="password"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunito_variablefont_wght"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--<EditText
             android:id="@+id/editPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:focusable="true"
             android:hint="password"
+            app:passwordToggleEnabled="true"
             android:inputType="textPassword"
             android:maxLength="11"
             android:fontFamily="@font/nunito_variablefont_wght"
-            android:textColor="@color/black"></EditText>
+            android:textColor="@color/black"></EditText>-->
 
     </RelativeLayout>
 
@@ -209,3 +255,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

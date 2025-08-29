@@ -29,12 +29,21 @@ class LoginViewModel: BaseViewModel() {
           progressBar.value= true
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                var response  = api.Login(body)
+                try {
+                    var response = api.Login(body)
 
-                successfullyLogin.postValue(response.body())
-                feedBackMessage.postValue( response.raw().message())
-                viewModelScope.launch(Dispatchers.Main){
-                    progressBar.value= false
+                    successfullyLogin.postValue(response.body())
+                    feedBackMessage.postValue(response.raw().message())
+                    viewModelScope.launch(Dispatchers.Main) {
+                        progressBar.value = false
+                    }
+                }catch(e:Exception){
+                    e.printStackTrace()
+                    viewModelScope.launch(Dispatchers.Main) {
+                        progressBar.value = false
+                        feedBackMessage.value = e.message!!
+                    }
+
                 }
             }
 

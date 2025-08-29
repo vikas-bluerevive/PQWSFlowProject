@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -130,6 +131,18 @@ TimePickerDialog.OnTimeSetListener{
             }
         })
 */
+        binding.switch2?.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(p0: CompoundButton?, isChecked: Boolean) {
+               if(isChecked){
+                   binding.contraintStatus?.setBackgroundColor(Color.parseColor("#0BC753"))
+                   binding.statusText?.setText("ON")
+
+               }else{
+                   binding.contraintStatus?.setBackgroundColor(Color.parseColor("#FF0000"))
+                   binding.statusText?.setText("OFF")
+               }
+            }
+        })
         mainActivityViewModel.progressBar.observe(this, Observer<Boolean> {
             if (it) {
                 CommonFunction.showProgressBar(this,"Loading..")
@@ -205,10 +218,21 @@ TimePickerDialog.OnTimeSetListener{
 
               //  if(binding.switch1?.isChecked == true){
                     if(spinnerInstantSelection == 2){
-                  mainActivityViewModel.createScedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0),binding.editTimeSchedule.text.toString())
+                        if(CommonFunction.isNetworkConnected(this)) {
+                            mainActivityViewModel.createScedule(
+                                pref.getInt("sourceId", 0),
+                                pref.getInt("supplyId", 0),
+                                binding.editTimeSchedule.text.toString()
+                            )
+                        }
                 }else if(spinnerInstantSelection == 1){
                    // else if(binding.switch1?.isChecked == false){
-                    mainActivityViewModel.createInstantSchedule(pref.getInt("sourceId",0),pref.getInt("supplyId",0))
+                        if(CommonFunction.isNetworkConnected(this)) {
+                            mainActivityViewModel.createInstantSchedule(
+                                pref.getInt("sourceId", 0),
+                                pref.getInt("supplyId", 0)
+                            )
+                        }
 
                 }
             }else{
@@ -292,16 +316,15 @@ TimePickerDialog.OnTimeSetListener{
         val date  = ""+mDay+"-"+"0"+(mMonth+1)+"-"+mYear
         val date1 =  ""+mYear+"-"+"0"+(mMonth+1)+"-"+mDay
         binding.dateText?.setText(date1)
-        mainActivityViewModel.getWaterSummary(pref.getInt("supplyId",0),date1)
+        if(CommonFunction.isNetworkConnected(this)) {
+            mainActivityViewModel.getWaterSummary(pref.getInt("supplyId", 0), date1)
+        }
         binding.imageView12?.setOnClickListener {
 
             datePickerCalender(mYear,mMonth,mDay)
 
         }
-         var max_date_c = Calendar.getInstance();
-                max_date_c.set(Calendar.YEAR, 2);
-        val min_date_c = Calendar.getInstance()
-        min_date_c.set(Calendar.DAY_OF_MONTH,-7)
+
 
         val lineChart = binding.lineChart
         setupLineChartStyle(lineChart)

@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -109,7 +110,8 @@ class LoginActivty: FragmentActivity() {
                CommonFunction.hideProgressBar()
             }
         })
-
+        getWindow()
+            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         loginViewModel.successfullyLogin.observe(this, Observer {
                  var loginRes : LoginResponse2? = it
           Log.e("LoginResponse","log in response "+ loginRes)
